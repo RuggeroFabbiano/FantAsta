@@ -1,2 +1,2 @@
 # FantAsta
-A platform for fantasy football auctions
+A platform for fantasy-football auctions
