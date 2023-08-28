@@ -1,0 +1,82 @@
+:root {
+  --team1: AquaMarine;
+  --team2: Chartreuse;
+  --team3: Crimson;
+  --team4: DarkBlue;
+  --team5: DarkCyan;
+  --team6: DarkGoldenRod;
+  --team7: DarkGreen;
+  --team8: DarkKhaki;
+}
+
+body {font-family: 'Acme'}
+
+h1 {
+  font-family: 'Aboreto';
+  font-weight: bold;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+.team-button {
+  border-radius: 10px;
+  padding: 0.5rem 3rem;
+  font-family: 'Aboreto';
+}
+
+.team1 {background-color: var(--team1)}
+.team2 {background-color: var(--team2)}
+.team3 {
+  background-color: var(--team3);
+  color: white;
+}
+.team4 {
+  background-color: var(--team4);
+  color: white;
+}
+.team5 {
+  background-color: var(--team5);
+  color: white;
+}
+.team6 {
+  background-color: var(--team6);
+  color: white;
+}
+.team7 {
+  background-color: var(--team7);
+  color: white;
+}
+.team8 {background-color: var(--team8)}
+
+.asteriskField {display: none}
+label {margin-top: 1rem}
+.form-control, .select {border: 1pt solid DarkMagenta}
+
+.form-control:focus, .select:focus {
+  border: 1pt solid DarkMagenta !important;
+  box-shadow: none !important;
+}
+
+.button-form {
+  margin-top: 2rem;
+  width: 100%;
+  border: 2pt solid DarkMagenta;
+  border-radius: 5px;
+  padding: 5px;
+  color: DarkMagenta;
+  background-color: DarkMagenta;
+  color: white;
+}
+
+#rules {
+  margin: 0 3rem;
+  padding: 1rem;
+  overflow: auto;
+  background: radial-gradient(circle, AntiqueWhite 0%, white 100%);
+
+}
+
+.currency {text-decoration-line: line-through}
