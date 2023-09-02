@@ -4,7 +4,7 @@ from django.forms.fields import ChoiceField
 
 
 class SignInForm(AuthenticationForm):
-    """sdsdsd"""
+    """Sign-in form"""
 
     USERS = [(u.username, u.username) for u in User.objects.all()]
     username = ChoiceField(label='', choices=[(None, 'Ti ricordi come ti chiami?')] + USERS)

@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'crispy_forms',
     'import_export',
-    'account',
     'auction'
 ]
 LANGUAGE_CODE = 'it-it'
