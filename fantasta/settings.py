@@ -6,7 +6,7 @@ DOMAIN = 'fantasta.net'
 ENV = getenv('ENVIRONMENT', 'dev')
 
 if ENV == 'prod':
-    ADMINS = [('Ruggero Fabbiano', 'ruggero.fabbiano@gmail.com')]
+    ADMINS = [('Ruggero Fabbiano', 'ruggero_fabbiano@outlook.com')]
     ALLOWED_HOSTS = [DOMAIN, 'fantasta.eu-west-3.elasticbeanstalk.com']
 APPEND_SLASH = False
 ASGI_APPLICATION = 'fantasta.asgi.application'
@@ -126,7 +126,7 @@ if ENV == 'prod':
     SECURE_HSTS_SECONDS = 31536000 # 1 year
     SECURE_REDIRECT_EXEMPT = ['/health-check']
     SECURE_SSL_REDIRECT = True
-    SERVER_EMAIL = 'ruggero.fabbiano@gmail.com'
+    SERVER_EMAIL = 'ruggero_fabbiano@outlook.com'
     SESSION_COOKIE_SECURE = True
     SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 STATICFILES_DIRS = [BASE_DIR / 'fantasta' / 'static']
