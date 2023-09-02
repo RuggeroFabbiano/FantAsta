@@ -12,12 +12,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 BASE_DIR = Path(__file__).resolve().parent.parent
 CRISPY_ALLOWED_TEMPLATE_PACKS = CRISPY_TEMPLATE_PACK = 'bootstrap5'
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3'
-    }
-}
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER = 'ruggero_fabbiano@outlook.com'
 DJANGO_EASY_HEALTH_CHECK = {'PATH': "/health-check"}
@@ -117,6 +111,15 @@ CHANNEL_LAYERS = {
         "CONFIG": {
             "hosts": [("127.0.0.1" if ENV == 'dev' else DOMAIN, 6379)]
         }
+    }
+}
+DB_PATH = (
+    BASE_DIR / 'db.sqlite3' if ENV == 'dev' else BASE_DIR.parent / 'db.sqlite3'
+)
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': DB_PATH
     }
 }
 DEBUG = True # ENV == 'dev'
