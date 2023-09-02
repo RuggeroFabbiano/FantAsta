@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'crispy_forms',
     'import_export',
+    'auction'
 ]
 LANGUAGE_CODE = 'it-it'
 LOGGING = {
@@ -82,13 +83,19 @@ SECRET_KEY = getenv(
     'DJANGO_KEY',
     'django-insecure-6e3bzkjtu(9*#20y@du$(*e-kj57jh)jzoabzk!dn793wn9x=#'
 )
-STATICFILES_DIRS = [BASE_DIR / 'fantasta' / 'static']
+STATICFILES_DIRS = [
+    BASE_DIR / 'fantasta' / 'static',
+    BASE_DIR / 'admin' / 'static'
+]
 STATIC_ROOT = 'static'
 STATIC_URL = 'static/'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'fantasta' / 'templates'],
+        'DIRS': [
+            BASE_DIR / 'fantasta' / 'templates',
+            BASE_DIR / 'admin' / 'templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
