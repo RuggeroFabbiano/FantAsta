@@ -138,11 +138,11 @@ if ENV == 'prod':
     # LOGGING['loggers']['django.request'] = {
     #     'handlers': ['mail_admins'], 'level': 'ERROR', 'propagate': False
     # }
-    # SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    # SECURE_HSTS_PRELOAD = True
-    # SECURE_HSTS_SECONDS = 31536000 # 1 year
-    # SECURE_REDIRECT_EXEMPT = ['/health-check']
-    # SECURE_SSL_REDIRECT = True
-    # SERVER_EMAIL = 'ruggero_fabbiano@outlook.com'
-    # SESSION_COOKIE_SECURE = True
-    # SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_HSTS_SECONDS = 31536000 # 1 year
+    SECURE_REDIRECT_EXEMPT = ['/health-check']
+    SECURE_SSL_REDIRECT = True
+    SERVER_EMAIL = 'ruggero_fabbiano@outlook.com'
+    SESSION_COOKIE_SECURE = True
+    SESSION_EXPIRE_AT_BROWSER_CLOSE = True
