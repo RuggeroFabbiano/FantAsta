@@ -2,11 +2,12 @@ from os import environ, getenv
 from pathlib import Path
 
 
+DOMAIN = 'fantasta.net'
 ENV = getenv('ENVIRONMENT', 'dev')
 
 if ENV == 'prod':
     ADMINS = [('Ruggero Fabbiano', 'ruggero.fabbiano@gmail.com')]
-    ALLOWED_HOSTS = ['fantasta.eu-west-3.elasticbeanstalk.com']
+    ALLOWED_HOSTS = [DOMAIN, 'fantasta.eu-west-3.elasticbeanstalk.com']
 APPEND_SLASH = False
 ASGI_APPLICATION = 'fantasta.asgi.application'
 AUTH_PASSWORD_VALIDATORS = [
@@ -23,7 +24,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)]
+            "hosts": [("127.0.0.1" if ENV == 'dev' else DOMAIN, 6379)]
         }
     }
 }
@@ -38,7 +39,7 @@ DATABASES = {
 }
 DEBUG = ENV == 'dev'
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER = 'ruggero.fabbiano@gmail.com'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER = 'ruggero_fabbiano@outlook.com'
 DJANGO_EASY_HEALTH_CHECK = {'PATH': "/health-check"}
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 INSTALLED_APPS = [
