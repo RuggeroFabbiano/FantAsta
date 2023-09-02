@@ -118,9 +118,7 @@ DEBUG = ENV == 'dev'
 if ENV == 'prod':
     ADMINS = [('Ruggero Fabbiano', 'ruggero_fabbiano@outlook.com')]
     ALLOWED_HOSTS = [DOMAIN, 'fantasta.eu-west-3.elasticbeanstalk.com']
-    # AWS_ACCESS_KEY_ID = environ['AWS_ID']
-    # AWS_SECRET_ACCESS_KEY = environ['AWS_KEY'] 
-    # CSRF_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
     # LOGGING['formatters'] = {
     #     'custom': {
     #         'style': '{',
