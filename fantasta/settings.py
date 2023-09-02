@@ -25,7 +25,7 @@ DOMAIN = 'fantasta.net'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ENV = getenv('ENVIRONMENT', 'dev')
 INSTALLED_APPS = [
-    # 'daphne',
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
