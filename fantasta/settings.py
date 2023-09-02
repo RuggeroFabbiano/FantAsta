@@ -6,7 +6,7 @@ ENV = getenv('ENVIRONMENT', 'dev')
 
 if ENV == 'prod':
     ADMINS = [('Ruggero Fabbiano', 'ruggero.fabbiano@gmail.com')]
-    ALLOWED_HOSTS = ['test.leano.fr', 'test.eu-west-3.elasticbeanstalk.com']
+    ALLOWED_HOSTS = ['fantasta.eu-west-3.elasticbeanstalk.com']
 APPEND_SLASH = False
 ASGI_APPLICATION = 'fantasta.asgi.application'
 AUTH_PASSWORD_VALIDATORS = [
