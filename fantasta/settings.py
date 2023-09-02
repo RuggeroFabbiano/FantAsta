@@ -104,10 +104,6 @@ TIME_ZONE = 'Europe/Rome'
 WSGI_APPLICATION = 'fantasta.wsgi.application'
 
 
-ENV = 'dev'
-ALLOWED_HOSTS = [DOMAIN, 'fantasta.eu-west-3.elasticbeanstalk.com']
-
-
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
