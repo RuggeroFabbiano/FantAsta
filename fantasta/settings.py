@@ -43,7 +43,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER = 'ruggero_fabbiano@outlook.com'
 DJANGO_EASY_HEALTH_CHECK = {'PATH': "/health-check"}
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 INSTALLED_APPS = [
-    'daphne',
+    # 'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
