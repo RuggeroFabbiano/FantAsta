@@ -118,28 +118,28 @@ DEBUG = ENV == 'dev'
 if ENV == 'prod':
     ADMINS = [('Ruggero Fabbiano', 'ruggero_fabbiano@outlook.com')]
     ALLOWED_HOSTS = [DOMAIN, 'fantasta.eu-west-3.elasticbeanstalk.com']
-    AWS_ACCESS_KEY_ID = environ['AWS_ID']
-    AWS_SECRET_ACCESS_KEY = environ['AWS_KEY'] 
-    CSRF_COOKIE_SECURE = True
-    LOGGING['formatters'] = {
-        'custom': {
-            'style': '{',
-            'format': '{levelname} {asctime} {message}'
-        }
-    }
-    LOGGING['handlers']['fantasta'] = {
-        'class': 'logging.FileHandler',
-        'filename': F'/var/log/fantasta.log',
-        'level': 'DEBUG',
-        'formatter': 'custom'
-    }
-    LOGGING['loggers']['fantasta']['handlers'].append('fantasta')
-    LOGGING['loggers']['django'] = {
-        'handlers': ['fantasta'], 'level': 'INFO', 'propagate': False
-    }
-    LOGGING['loggers']['django.request'] = {
-        'handlers': ['mail_admins'], 'level': 'ERROR', 'propagate': False
-    }
+    # AWS_ACCESS_KEY_ID = environ['AWS_ID']
+    # AWS_SECRET_ACCESS_KEY = environ['AWS_KEY'] 
+    # CSRF_COOKIE_SECURE = True
+    # LOGGING['formatters'] = {
+    #     'custom': {
+    #         'style': '{',
+    #         'format': '{levelname} {asctime} {message}'
+    #     }
+    # }
+    # LOGGING['handlers']['fantasta'] = {
+    #     'class': 'logging.FileHandler',
+    #     'filename': F'/var/log/fantasta.log',
+    #     'level': 'DEBUG',
+    #     'formatter': 'custom'
+    # }
+    # LOGGING['loggers']['fantasta']['handlers'].append('fantasta')
+    # LOGGING['loggers']['django'] = {
+    #     'handlers': ['fantasta'], 'level': 'INFO', 'propagate': False
+    # }
+    # LOGGING['loggers']['django.request'] = {
+    #     'handlers': ['mail_admins'], 'level': 'ERROR', 'propagate': False
+    # }
     # SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     # SECURE_HSTS_PRELOAD = True
     # SECURE_HSTS_SECONDS = 31536000 # 1 year
