@@ -1,0 +1,23 @@
+{% extends "admin/base_site.html" %}
+
+{% load static i18n %}
+
+{% block extrastyle %}
+<link rel="stylesheet" type="text/css" href="{% static 'prism.css' %}">
+<script src="{% static 'prism.js' %}" defer></script>
+
+{% endblock %}
+{% block title %}{% translate "Log" %}{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content_title %}
+  <h1>{% translate "Log content" %}</h1>
+{% endblock %}
+
+{% block content %}
+  <div>
+    {% comment %} Not indenting code inside pre to avoid having first line indented in output {% endcomment %}
+    <pre><code class="language-log">{{content}}</code></pre>
+  </div>
+{% endblock %}
