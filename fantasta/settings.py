@@ -119,7 +119,7 @@ CHANNEL_LAYERS = {
         }
     }
 }
-DEBUG = ENV == 'dev'
+DEBUG = True # ENV == 'dev'
 
 
 if ENV == 'prod':
