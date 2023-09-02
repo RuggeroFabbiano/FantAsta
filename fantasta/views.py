@@ -6,9 +6,8 @@ from django.views.generic import ListView, TemplateView, View
 # from auction.models import Club
 
 
-class Home(View):
-    def get(self, request, *args, **kwargs):
-        return HttpResponse("OK")
+class Home(TemplateView):
+    template_name = 'base.html'
 
 
 # class Home(ListView):

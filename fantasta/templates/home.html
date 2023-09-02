@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block extra_headers %}
+  <style>
+    #logo-desktop {
+      height: 75%;
+      border-radius: 15px;
+      background-image: url('{% static "logo.png" %}');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      display: flex;
+      margin: auto;
+    }
+    #logo-mobile {
+      display: flex;
+      padding: 1rem;
+    }
+    @media (min-width: 601px) {
+      #logo-desktop {display: auto}
+      #logo-mobile {display: none}
+      #main-container {height: 100vh}
+    }
+    @media (max-width: 600px) {
+      #logo-desktop {display: none}
+      #logo-mobile {display: auto}
+      #main-container {height: calc(100vh - 100px - 2rem)}
+    }
+  </style>
+{% endblock %}
+
+{% block body %}
+  <div id="logo-mobile">
+    <img src="{% static 'logo.png' %}" title="La FantaSuperLega" alt="La FantaSuperLega" height="100px">
+    <h1 style="font-size: 16pt; margin: auto">La FantaSuperLega</h1>
+  </div>
+  <div id="main-container" class="d-flex">
+    <div id="logo-desktop">
+      <h1 style="margin: auto; background-color: #FFFFFF3F; padding: 0.5rem 1rem">La FantaSuperLega</h1>
+    </div>
+    <div class="d-flex" style="margin: auto; height: 100%">
+      <div class="d-flex flex-column justify-content-between text-center" style="margin: auto; height: 75%" onmouseleave="downlight()">
+        {% for club in object_list|dictsort:"name" %}
+          <a href="{% url 'sign-in' id=club.user.id %}">
+            <div class="team-button {{club.label}}" onmouseover="highlight(this)">{{club}}</div>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    function highlight(el) {
+      $(".team-button").css("background-image", "linear-gradient(rgb(0 0 0/40%) 0 0)");
+      $(el).css("background-image", "none");
+    }
+    function downlight() {$(".team-button").css("background-image", "none");}
+  </script>
+{% endblock %}
