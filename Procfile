@@ -1,0 +1,1 @@
+websocket: daphne -b :: -p 5000 fantasta.asgi:application
