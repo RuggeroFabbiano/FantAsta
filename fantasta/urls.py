@@ -8,8 +8,8 @@ from . import views
 
 
 urlpatterns = [
-    path("admin/logs/<str:log>", logs.Logs.as_view(), name="admin-logs"),
-    path("admin/log", logs.Log.as_view(), name="admin-log"),
+    path("admin/logs", logs.Logs.as_view(), name="admin-logs"),
+    path("admin/logs/<str:log>", logs.Log.as_view(), name="admin-log"),
     path('admin/', admin.site.urls),
     path('', views.Home.as_view()),
     path('connessione/<int:id>', views.SendPassowrd.as_view(), name="sign-in"),
