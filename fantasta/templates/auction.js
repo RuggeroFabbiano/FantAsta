@@ -221,7 +221,7 @@ function send(data) {
 }
 
 // Socket close
-socket.onclose = function(e) {console.error("Chat socket closed unexpectedly");}
+socket.onclose = function(e) {console.error("Web socket closed unexpectedly");}
 
 
 
