@@ -8,12 +8,21 @@ from .models import Club, Player
 
 site.register(Club, ModelAdmin)
 
+@register(Club)
+class ClubAdmin(ModelAdmin):
+    """aaaa"""
+
+    fields = ['name', 'money', 'user']
+
 
 @register(Player)
 class PlayerAdmin(ImportExportModelAdmin):
+    """aaa"""
 
     class PlayerResource(ModelResource):
+        """aaa"""
         class Meta:
             model = Player
 
     resource_class = PlayerResource
+    fields = ['name', 'team', 'role', 'price']
