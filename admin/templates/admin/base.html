@@ -139,7 +139,7 @@
             {% block sidebar %}{% endblock %}
 
             {% comment %} Show custom links only in admin home page {% endcomment %}
-            {% comment %} {% if request.path == '/MyCassis-2.1/' %} {% endcomment %}
+            {% if request.path == '/admin/' %}
               <div class="module">
                 <table>
                   <caption>{% translate "Actions" %}</caption>
@@ -154,7 +154,7 @@
                   </tbody>
                 </table>
               </div>
-            {% comment %} {% endif %} {% endcomment %}
+            {% endif %}
 
             <br class="clear">
           </div>
