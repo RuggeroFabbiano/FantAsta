@@ -13,6 +13,10 @@ urlpatterns = [
     path('', views.Home.as_view()),
     # path("conto/", include("account.urls")),
     path('regole', views.Rules.as_view(), name='rules'),
+
+
+    path('', views.Home.as_view(), name='auction'),
+
     # path('asta', viewsAuction.Room.as_view(), name='auction'),
     # path('players/<str:role>', viewsAuction.PlayerList.as_view(), name='players')
 ]
