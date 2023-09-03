@@ -106,20 +106,17 @@ WSGI_APPLICATION = 'fantasta.wsgi.application'
 
 
 CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("127.0.0.1" if ENV == 'dev' else DOMAIN, 6379)]
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1' if ENV == 'dev' else 'redis', 6379)]
         }
     }
 }
-DB_PATH = (
-    BASE_DIR / 'db.sqlite3' if ENV == 'dev' else BASE_DIR.parent / 'db.sqlite3'
-)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': DB_PATH
+        'NAME': BASE_DIR / 'db.sqlite3'
     }
 }
 DEBUG = True # ENV == 'dev'
@@ -156,3 +153,13 @@ if ENV == 'prod':
     SERVER_EMAIL = 'ruggero_fabbiano@outlook.com'
     SESSION_COOKIE_SECURE = True
     SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+
+
+ALLOWED_HOSTS = [DOMAIN, '.doprax.com']
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {'hosts': [('redis', 6379)]}
+    }
+}
