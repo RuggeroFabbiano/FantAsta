@@ -1,6 +1,6 @@
 volumes:
   - name:  static
-    mount: /staticfiles/
+    mount: /static/
 
 services:
   - redis:
