@@ -1,4 +1,4 @@
-from os import environ, getenv
+from os import getenv
 from pathlib import Path
 
 
@@ -32,33 +32,6 @@ INSTALLED_APPS = [
     'auction'
 ]
 LANGUAGE_CODE = 'it-it'
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {'()': 'django.utils.log.RequireDebugFalse'},
-        'require_debug_true': {'()': 'django.utils.log.RequireDebugTrue'}
-    },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'level': 'DEBUG',
-            'filters': ['require_debug_true']
-        },
-        'mail_admins': {
-            'class': 'django.utils.log.AdminEmailHandler',
-            'level': 'ERROR',
-            'filters': ['require_debug_false']
-        },
-        'null': {'class': 'logging.NullHandler'}
-    },
-    'loggers': {
-        'django.security.DisallowedHost': {
-            'handlers': ['null'], 'propagate': False
-        },
-        'fantasta': {'handlers': ['console'], 'level': 'DEBUG'}
-    }
-}
 LOGIN_REDIRECT_URL = 'waiting_room'
 LOGIN_URL = 'log-in'
 LOGOUT_REDIRECT_URL = '/'
@@ -126,25 +99,6 @@ if ENV == 'prod':
     ADMINS = [('Ruggero Fabbiano', 'ruggero_fabbiano@outlook.com')]
     ALLOWED_HOSTS = [DOMAIN, 'fantasta.eu-west-3.elasticbeanstalk.com']
     CSRF_COOKIE_SECURE = True
-    LOGGING['formatters'] = {
-        'custom': {
-            'style': '{',
-            'format': '{levelname} {asctime} {message}'
-        }
-    }
-    LOGGING['handlers']['fantasta'] = {
-        'class': 'logging.FileHandler',
-        'filename': '/var/log/fantasta.log',
-        'level': 'DEBUG',
-        'formatter': 'custom'
-    }
-    LOGGING['loggers']['fantasta']['handlers'].append('fantasta')
-    LOGGING['loggers']['django'] = {
-        'handlers': ['fantasta'], 'level': 'INFO', 'propagate': False
-    }
-    LOGGING['loggers']['django.request'] = {
-        'handlers': ['mail_admins'], 'level': 'ERROR', 'propagate': False
-    }
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
     SECURE_HSTS_SECONDS = 31536000 # 1 year
