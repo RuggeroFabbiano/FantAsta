@@ -13,11 +13,9 @@ AUTH_PASSWORD_VALIDATORS = [
 BASE_DIR = Path(__file__).resolve().parent.parent
 CRISPY_ALLOWED_TEMPLATE_PACKS = CRISPY_TEMPLATE_PACK = 'bootstrap5'
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER = 'ruggero_fabbiano@outlook.com'
-DJANGO_EASY_HEALTH_CHECK = {'PATH': "/health-check"}
-DOMAIN = 'fantasta.net'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER = 'ruggero.fabbiano@gmail.com'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-ENV = getenv('ENVIRONMENT', 'dev')
+# ENV = getenv('ENVIRONMENT', 'dev')
 INSTALLED_APPS = [
     'daphne',
     'django.contrib.admin',
@@ -36,7 +34,6 @@ LOGIN_REDIRECT_URL = 'waiting_room'
 LOGIN_URL = 'log-in'
 LOGOUT_REDIRECT_URL = '/'
 MIDDLEWARE = [
-    'easy_health_check.middleware.HealthCheckMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -78,14 +75,14 @@ TIME_ZONE = 'Europe/Rome'
 WSGI_APPLICATION = 'fantasta.wsgi.application'
 
 
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            'hosts': [('127.0.0.1' if ENV == 'dev' else 'redis', 6379)]
-        }
-    }
-}
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             'hosts': [('127.0.0.1' if ENV == 'dev' else 'redis', 6379)]
+#         }
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -95,22 +92,20 @@ DATABASES = {
 DEBUG = True # ENV == 'dev'
 
 
-if ENV == 'prod':
-    ADMINS = [('Ruggero Fabbiano', 'ruggero_fabbiano@outlook.com')]
-    ALLOWED_HOSTS = [DOMAIN, 'fantasta.eu-west-3.elasticbeanstalk.com']
-    CSRF_COOKIE_SECURE = True
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-    SECURE_HSTS_SECONDS = 31536000 # 1 year
-    SECURE_REDIRECT_EXEMPT = ['/health-check']
-    SECURE_SSL_REDIRECT = True
-    SERVER_EMAIL = 'ruggero_fabbiano@outlook.com'
-    SESSION_COOKIE_SECURE = True
-    SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+# if ENV == 'prod':
+#     ADMINS = [('Ruggero Fabbiano', 'ruggero_fabbiano@outlook.com')]
+#     ALLOWED_HOSTS = [DOMAIN, 'fantasta.eu-west-3.elasticbeanstalk.com']
+#     CSRF_COOKIE_SECURE = True
+#     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+#     SECURE_HSTS_PRELOAD = True
+#     SECURE_HSTS_SECONDS = 31536000 # 1 year
+#     SECURE_REDIRECT_EXEMPT = ['/health-check']
+#     SECURE_SSL_REDIRECT = True
+#     SERVER_EMAIL = 'ruggero_fabbiano@outlook.com'
+#     SESSION_COOKIE_SECURE = True
+#     SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
-
-
-ALLOWED_HOSTS = ['*', DOMAIN, '.doprax.com']
+ALLOWED_HOSTS = ['*']
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
