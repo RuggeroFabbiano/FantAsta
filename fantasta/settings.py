@@ -137,7 +137,7 @@ if ENV == 'prod':
     }
     LOGGING['handlers']['fantasta'] = {
         'class': 'logging.FileHandler',
-        'filename': F'/var/log/fantasta.log',
+        'filename': '/var/log/fantasta.log',
         'level': 'DEBUG',
         'formatter': 'custom'
     }
