@@ -112,3 +112,4 @@ CHANNEL_LAYERS = {
         'CONFIG': {'hosts': [('redis', 6379)]}
     }
 }
+CSRF_TRUSTED_ORIGINS = ['https://fantastayvcm.kfirjgyswf.dopraxrocks.com']
