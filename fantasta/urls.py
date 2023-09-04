@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import include, path, re_path
+from django.urls import include, path
 
 # from admin import views as logs
 # from auction import views as auction
@@ -18,9 +18,6 @@ from django.urls import include, path, re_path
     # path('asta', auction.Room.as_view(), name='auction'),
     # path('players/<str:role>', auction.PlayerList.as_view(), name='players')
 # ]
-
-# socket_patterns = [re_path("asta", Consumer.as_asgi())]
-
 
 urlpatterns = [
     path("chat/", include("auction.urls")),
