@@ -71,7 +71,6 @@ TEMPLATES = [
         }
     }
 ]
-TIME_ZONE = 'Europe/Rome'
 WSGI_APPLICATION = 'fantasta.wsgi.application'
 
 
