@@ -5,6 +5,8 @@ from . import views
 
 
 urlpatterns = [
+    path('regole', views.Rules.as_view(), name='rules'),
+    # TEMPORARY: CHAT
     path("", views.index, name="index"),
     path("<str:room_name>/", views.room, name="room"),
 ]
