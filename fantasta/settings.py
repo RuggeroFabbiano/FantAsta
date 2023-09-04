@@ -15,7 +15,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = CRISPY_TEMPLATE_PACK = 'bootstrap5'
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER = 'ruggero.fabbiano@gmail.com'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# ENV = getenv('ENVIRONMENT', 'dev')
+ENV = getenv('ENVIRONMENT', 'dev')
 INSTALLED_APPS = [
     'daphne',
     'django.contrib.admin',

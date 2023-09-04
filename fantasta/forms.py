@@ -7,7 +7,9 @@ class SignInForm(AuthenticationForm):
     """Sign-in form"""
 
     USERS = [(u.username, u.username) for u in User.objects.all()]
-    username = ChoiceField(label='', choices=[(None, 'Ti ricordi come ti chiami?')] + USERS)
+    username = ChoiceField(
+        label='', choices=[(None, 'Ti ricordi come ti chiami?')] + USERS
+    )
 
     def __init__(self, request, *args, **kwargs):
         super().__init__(request, *args, **kwargs)
