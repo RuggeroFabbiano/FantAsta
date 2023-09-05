@@ -11,20 +11,20 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, RedirectView
 
 from .forms import SignInForm
-from auction.models import Club
+# from auction.models import Club
 
 
-class Home(ListView):
-    """Home page"""
+# class Home(ListView):
+#     """Home page"""
 
-    template_name = 'home.html'
-    model = Club
+#     template_name = 'home.html'
+#     model = Club
 
-    def dispatch(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        """Check if user is already authenticated before rendering the page"""
-        if request.user.is_authenticated:
-            return redirect('rules')
-        return super().dispatch(request, *args, **kwargs)
+#     def dispatch(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+#         """Check if user is already authenticated before rendering the page"""
+#         if request.user.is_authenticated:
+#             return redirect('rules')
+#         return super().dispatch(request, *args, **kwargs)
 
 
 class SendPassowrd(RedirectView):
