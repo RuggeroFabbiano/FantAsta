@@ -13,8 +13,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("asta/", include("auction.urls")),  #! TEMP.
     path('', views.Home.as_view()),
-    # path('connessione/<int:id>', views.SendPassowrd.as_view(), name="sign-in"),
-    # path('connessione', views.SignIn.as_view(), name="log-in"),
-    # path('asta', auction.Room.as_view(), name='auction'),
-    # path('players/<str:role>', auction.PlayerList.as_view(), name='players')
+    path('connessione/<int:id>', views.SendPassowrd.as_view(), name="sign-in"),
+    path('connessione', views.SignIn.as_view(), name="log-in"),
 ]
