@@ -113,12 +113,3 @@ CHANNEL_LAYERS = {
     }
 }
 CSRF_TRUSTED_ORIGINS = ['https://fantastayvcm.kfirjgyswf.dopraxrocks.com']
-
-
-# ADMIN_PASSWORD  WLAGNOCCA
-# AWS_ID  AKIARZW45FMNRSW4NSUR
-# AWS_KEY yV0mUr5qNwzczjUPzGtcUARX6Q1UW8oa3WWfFqpn
-# DJANGO_KEY  sa(l)2tmq0&37fj-@(o0fv60uq+gkys6w_sr5sdr4$b-h623q&
-# DJANGO_SETTINGS_MODULE  fantasta.settings
-# ENVIRONMENT prod
-# PYTHONPATH  /var/app/current:$PYTHONPATH
