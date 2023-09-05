@@ -92,18 +92,18 @@ DATABASES = {
 DEBUG = True # ENV == 'dev'
 
 
-# if ENV == 'prod':
-#     ADMINS = [('Ruggero Fabbiano', 'ruggero_fabbiano@outlook.com')]
-#     ALLOWED_HOSTS = [DOMAIN, 'fantasta.eu-west-3.elasticbeanstalk.com']
-#     CSRF_COOKIE_SECURE = True
-#     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-#     SECURE_HSTS_PRELOAD = True
-#     SECURE_HSTS_SECONDS = 31536000 # 1 year
-#     SECURE_REDIRECT_EXEMPT = ['/health-check']
-#     SECURE_SSL_REDIRECT = True
-#     SERVER_EMAIL = 'ruggero_fabbiano@outlook.com'
-#     SESSION_COOKIE_SECURE = True
-#     SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+if ENV == 'prod':
+    ADMINS = [('Ruggero Fabbiano', 'ruggero_fabbiano@outlook.com')]
+    ALLOWED_HOSTS = ['fantasta.eu-west-3.elasticbeanstalk.com']
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_HSTS_SECONDS = 31536000 # 1 year
+    SECURE_REDIRECT_EXEMPT = ['/health-check']
+    SECURE_SSL_REDIRECT = True
+    SERVER_EMAIL = 'ruggero_fabbiano@outlook.com'
+    SESSION_COOKIE_SECURE = True
+    SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 ALLOWED_HOSTS = ['*']
 CHANNEL_LAYERS = {
@@ -113,3 +113,12 @@ CHANNEL_LAYERS = {
     }
 }
 CSRF_TRUSTED_ORIGINS = ['https://fantastayvcm.kfirjgyswf.dopraxrocks.com']
+
+
+# ADMIN_PASSWORD  WLAGNOCCA
+# AWS_ID  AKIARZW45FMNRSW4NSUR
+# AWS_KEY yV0mUr5qNwzczjUPzGtcUARX6Q1UW8oa3WWfFqpn
+# DJANGO_KEY  sa(l)2tmq0&37fj-@(o0fv60uq+gkys6w_sr5sdr4$b-h623q&
+# DJANGO_SETTINGS_MODULE  fantasta.settings
+# ENVIRONMENT prod
+# PYTHONPATH  /var/app/current:$PYTHONPATH
