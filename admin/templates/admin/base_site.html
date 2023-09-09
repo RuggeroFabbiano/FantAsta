@@ -1,0 +1,16 @@
+{% extends "admin/base.html" %}
+
+{% load static %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block branding %}
+  <div style="padding-top: 3px">
+    <a style="border: 0; padding: 0" href="{% url 'admin:index' %}">
+      <img src="{% static "logo.png" %}" alt="Fantasta" height="20px" style="margin-right: 10px">
+      <span style="vertical-align: top">La FantaSuperLega</span>
+    </a>
+  </div>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
