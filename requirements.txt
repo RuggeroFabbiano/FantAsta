@@ -7,3 +7,4 @@ django-import-export~=3.2.0
 gunicorn~=21.2.0
 pymysql~=1.1.0
 supervisor~=4.2.5
+whitenoise~=6.5.0

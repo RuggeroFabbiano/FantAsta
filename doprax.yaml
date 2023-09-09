@@ -1,6 +1,6 @@
 main:
   volumes:
-    - name: statics
+    - name: static
       mount: /static/
 
 services:
