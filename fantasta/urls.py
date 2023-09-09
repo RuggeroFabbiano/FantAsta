@@ -4,7 +4,7 @@ from django.urls import include, path
 # from admin import views as logs
 # from auction import views as auction
 # from .consumers import Consumer
-from . import views
+# from . import views
 
 
 urlpatterns = [
