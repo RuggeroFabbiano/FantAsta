@@ -1,4 +1,4 @@
-from os import getenv
+from os import environ, getenv
 from pathlib import Path
 
 
@@ -74,42 +74,41 @@ TEMPLATES = [
 TIME_ZONE = 'Europe/Rome'
 WSGI_APPLICATION = 'fantasta.wsgi.application'
 
-
-# CHANNEL_LAYERS = {
-#     'default': {
-#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
-#         'CONFIG': {
-#             'hosts': [('127.0.0.1' if ENV == 'dev' else 'redis', 6379)]
-#         }
-#     }
-# }
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1' if ENV == 'dev' else 'redis', 6379)]
+        }
+    }
+}
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3'
+    } if ENV == 'dev' else {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'ProdDB',
+        'PORT': '3306',
+        'USER': 'root',
+        'HOST': environ['DB_HOST'],
+        'PASSWORD': environ['DB_PASSWORD']
     }
 }
 DEBUG = True # ENV == 'dev'
 
-
-if ENV == 'prod':
-    ADMINS = [('Ruggero Fabbiano', 'ruggero_fabbiano@outlook.com')]
-    ALLOWED_HOSTS = ['fantasta.eu-west-3.elasticbeanstalk.com']
-    CSRF_COOKIE_SECURE = True
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-    SECURE_HSTS_SECONDS = 31536000 # 1 year
-    SECURE_REDIRECT_EXEMPT = ['/health-check']
-    SECURE_SSL_REDIRECT = True
-    SERVER_EMAIL = 'ruggero_fabbiano@outlook.com'
-    SESSION_COOKIE_SECURE = True
-    SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-
+# if ENV == 'prod':
+#     ADMINS = [('Ruggero Fabbiano', 'ruggero_fabbiano@outlook.com')]
+#     ALLOWED_HOSTS = ['fantasta.eu-west-3.elasticbeanstalk.com']
+#     CSRF_COOKIE_SECURE = True
+#     CSRF_TRUSTED_ORIGINS = ['https://fantastayvcm.kfirjgyswf.dopraxrocks.com']
+#     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+#     SECURE_HSTS_PRELOAD = True
+#     SECURE_HSTS_SECONDS = 31536000 # 1 year
+#     SECURE_REDIRECT_EXEMPT = ['/health-check']
+#     SECURE_SSL_REDIRECT = True
+#     SERVER_EMAIL = 'ruggero_fabbiano@outlook.com'
+#     SESSION_COOKIE_SECURE = True
+#     SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 ALLOWED_HOSTS = ['*']
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {'hosts': [('redis', 6379)]}
-    }
-}
 CSRF_TRUSTED_ORIGINS = ['https://fantastayvcm.kfirjgyswf.dopraxrocks.com']
