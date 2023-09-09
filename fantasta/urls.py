@@ -1,15 +1,14 @@
 from django.contrib import admin
 from django.urls import include, path
 
-# from admin import views as logs
+from admin.views import Log
 # from auction import views as auction
 # from .consumers import Consumer
 # from . import views
 
 
 urlpatterns = [
-    # path("admin/logs", logs.Logs.as_view(), name="admin-logs"),
-    # path("admin/logs/<str:log>", logs.Log.as_view(), name="admin-log"),
+    path("admin/log", Log.as_view(), name="admin-log"),
     path("admin/", admin.site.urls),
     # path("asta/", include("auction.urls")),
     # path('', views.Home.as_view()),
