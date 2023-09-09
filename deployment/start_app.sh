@@ -2,13 +2,16 @@
 source /fantastenv/bin/activate
 cd /code
 
-echo "\n----- Collect static files -----" 
+echo "" 
+echo "----- Collect static files -----" 
 python manage.py collectstatic --noinput
 
-echo "\n----- Apply migrations -----"
+echo "" 
+echo "----- Apply migrations -----"
 python manage.py migrate auth
 python manage.py makemigrations 
 python manage.py migrate
 
-echo "\n----- Run GUnicorn -----"
+echo "" 
+echo "----- Run GUnicorn -----"
 gunicorn -b :8000 fantasta.wsgi:application

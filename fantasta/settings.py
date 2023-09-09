@@ -100,13 +100,13 @@ DEBUG = True # ENV == 'dev'
 if ENV == 'prod':
     ADMINS = [('Ruggero Fabbiano', 'ruggero_fabbiano@outlook.com')]
     ALLOWED_HOSTS = ['testncgd.kfirjgyswf.dopraxrocks.com']
-#     CSRF_COOKIE_SECURE = True
+    # CSRF_COOKIE_SECURE = True
     CSRF_TRUSTED_ORIGINS = ['https://testncgd.kfirjgyswf.dopraxrocks.com']
-#     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-#     SECURE_HSTS_PRELOAD = True
-#     SECURE_HSTS_SECONDS = 31536000 # 1 year
-#     SECURE_REDIRECT_EXEMPT = ['/health-check']
-#     SECURE_SSL_REDIRECT = True
-#     SERVER_EMAIL = 'ruggero_fabbiano@outlook.com'
-#     SESSION_COOKIE_SECURE = True
-#     SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+    # SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    # SECURE_HSTS_PRELOAD = True
+    # SECURE_HSTS_SECONDS = 31536000 # 1 year
+    # SECURE_REDIRECT_EXEMPT = ['/health-check']
+    # SECURE_SSL_REDIRECT = True
+    # SERVER_EMAIL = 'ruggero_fabbiano@outlook.com'
+    # SESSION_COOKIE_SECURE = True
+    # SESSION_EXPIRE_AT_BROWSER_CLOSE = True
