@@ -13,5 +13,5 @@ urlpatterns = [
     path('', views.Home.as_view()),
     path('connessione/<int:id>', views.SendPassowrd.as_view(), name="sign-in"),
     path('connessione', views.SignIn.as_view(), name="log-in"),
-    # path("asta/", include("auction.urls"))
+    path("asta/", include("auction.urls"))
 ]
