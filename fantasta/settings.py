@@ -90,7 +90,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ProdDB',
         'PORT': '3306',
-        'USER': 'root',
+        'USER': 'DjangoDB',
         'HOST': 'mysql8',
         'PASSWORD': environ['DB_PASSWORD']
     }
