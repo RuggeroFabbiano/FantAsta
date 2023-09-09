@@ -91,7 +91,7 @@ DATABASES = {
         'NAME': 'ProdDB',
         'PORT': '3306',
         'USER': 'root',
-        'HOST': environ['DB_HOST'],
+        'HOST': 'mysql8',
         'PASSWORD': environ['DB_PASSWORD']
     }
 }
