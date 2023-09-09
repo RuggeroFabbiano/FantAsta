@@ -8,6 +8,7 @@ python manage.py collectstatic --noinput
 
 echo "" 
 echo "----- Apply migrations -----"
+sleep 1
 python manage.py migrate auth
 python manage.py makemigrations 
 python manage.py migrate
