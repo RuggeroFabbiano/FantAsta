@@ -52,8 +52,8 @@ STATICFILES_DIRS = [
     BASE_DIR / 'fantasta' / 'static',
     BASE_DIR / 'admin' / 'static'
 ]
-STATIC_ROOT = 'static'
-STATIC_URL = '/static/'
+STATIC_ROOT = '/static/'
+STATIC_URL = 'static/'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
