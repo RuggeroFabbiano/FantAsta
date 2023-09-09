@@ -2,8 +2,6 @@ from django.contrib import admin
 from django.urls import include, path
 
 from admin.views import Log
-# from auction import views as auction
-# from .consumers import Consumer
 from . import views
 
 
