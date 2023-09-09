@@ -13,5 +13,9 @@ python manage.py makemigrations
 python manage.py migrate
 
 echo "" 
+echo "----- Create superuser -----"
+python manage.py create_administrator
+
+echo "" 
 echo "----- Run GUnicorn -----"
 gunicorn -b :8000 fantasta.wsgi:application
