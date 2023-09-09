@@ -1,18 +1,20 @@
 from django.urls import path, re_path
 
-from .consumers import ChatConsumer
+from .consumers import Consumer, ChatConsumer  # CHAT
 from . import views
 
 
 urlpatterns = [
     path('regole', views.Rules.as_view(), name='rules'),
-    path('asta', views.Room.as_view(), name='auction'),
+    path('', views.Room.as_view(), name='auction'),
     path('players/<str:role>', views.PlayerList.as_view(), name='players'),
-    # TEMPORARY: CHAT
+    # CHAT
     path("", views.index, name="index"),
-    path("<str:room_name>/", views.room, name="room"),
+    path("<str:room_name>/", views.room, name="room")
 ]
 
 socket_patterns = [
-    re_path(r"ws/asta/(?P<room_name>\w+)/$", ChatConsumer.as_asgi()),
+    re_path("ws/asta/", Consumer.as_asgi()),
+    # CHAT
+    re_path(r"ws/asta/(?P<room_name>\w+)/$", ChatConsumer.as_asgi())
 ]

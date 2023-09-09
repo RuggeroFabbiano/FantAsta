@@ -1,5 +1,5 @@
 // INITIALISATION
-const socket = new WebSocket("wss://" + window.location.host + "{{request.path}}");
+const socket = new WebSocket("wss://" + window.location.host + "/ws" + "{{request.path}}");
 var waitingForCall = true;
 var callTimeout = 0;
 var bidTimeout = 0;

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block head_title %}La FantAsta{% endblock %}
+
+{% block body %}
+
+  {% comment %} PARTICIPANT LIST TO SHOW BEFORE STARTING {% endcomment %}
+  <div id="participants">
+    {% for club in participants %}
+      <p class="{{club.user}}" style="display: none">
+        <span style="color: var(--{{club.label}})">{{club}}</span>
+        è entrato nell'asta
+      </p>
+    {% endfor %}
+  </div>
+
+  {% comment %} START/STOP BUTTON {% endcomment %}
+  {% if request.user.is_superuser %}
+    <button id="start-stop" onclick="startStop(this)">Avvia</button>
+  {% endif %}
+
+  {% comment %} AUCTION INFO {% endcomment %}
+  <div id="auction-info" style="display: none; background-color: aqua">
+    <p>Scelto: {{player}}</p>
+    <p>Rilancio attuale: {{club}} {{rilancio}}</p>
+    <p>TMPO FINITO: {{player}} acquistato da {{club}} per {{value}} <span class="currency">M</span></p>
+  </div>
+
+  {% comment %} PLAYER SELECTORS {% endcomment %}
+  <div id="player-selector-container" style="display: none">
+    <select id="player-selector"></select>
+    <button id="select-player" onclick="selectPlayer()">Avvia</button>
+  </div>
+
+  {% comment %} BID TOOLS {% endcomment %}
+  <div id="auction-chat" style="display: none; background-color: fuchsia">
+    <button id="raise-1" type="button" class="bid-button" onclick="raiseBid(1)">+1</button>
+    <button id="raise-5" type="button" class="bid-button" onclick="raiseBid(5)">+5</button>
+    <button id="raise-10" type="button" class="bid-button" onclick="raiseBid(10)">+10</button>
+    <input id="raise-custom" type="number" placeholder="inserisci rilancio"/>
+    <button id="bid" type="button" class="bid-button" onclick="raiseBid(parseInt($('#raise-custom').val()))">
+      Rilancia
+    </button>
+  </div>
+
+  {% comment %} TEAMS INFO {% endcomment %}
+  <div id="teams-info" style="display: none; background-color: green; width: 100px; height: 100px">
+  </div>
+
+  <script type="text/javascript">{% include "auction/auction.js" %}</script>
+
+{% endblock %}
