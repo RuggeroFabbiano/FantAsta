@@ -5,12 +5,12 @@ from . import views
 
 
 urlpatterns = [
-    path('regole', views.Rules.as_view(), name='rules'),
-    path('', views.Room.as_view(), name='auction'),
-    path('players/<str:role>', views.PlayerList.as_view(), name='players'),
+    path("regole", views.Rules.as_view(), name="rules"),
+    path("", views.Room.as_view(), name="auction"),
+    path("players/<str:role>", views.PlayerList.as_view(), name="players"),
     # CHAT
-    path("", views.index, name="index"),
-    path("<str:room_name>/", views.room, name="room")
+    path("room", views.index, name="index"),
+    path("room/<str:room_name>/", views.room, name="room")
 ]
 
 socket_patterns = [
