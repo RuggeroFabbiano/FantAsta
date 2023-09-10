@@ -10,7 +10,7 @@ var bidTimeout = 0;
 // ACTIONS (SEND MESSAGES)
 
 // Send auction-joined confirmation
-socket.onopen = function(event) {send({"event": "join", "club": "{{request.user.club}}"});};
+socket.onopen = function(event) {send({"event": "join", "user": "{{request.user}}"});};
 
 /**
  * Toggle auction activation/pause
@@ -55,7 +55,7 @@ socket.onmessage = function(event) {
     const data = JSON.parse(event.data);
     switch (data.event) {
         case "join":
-            addParticipant(data.club);
+            addParticipant(data.user);
             break;
         case "start_auction":
             showAuctionDashboard();
@@ -84,9 +84,9 @@ socket.onmessage = function(event) {
 
 /**
  * Add participant to the group
- * @param {String} club name of the club of the attending user
+ * @param {String} user attengin user
  */
-function addParticipant(club) {$(`#participants > .${club}`).show();}
+function addParticipant(user) {$(`#participants > .${user}`).show();}
 
 /**
  * Show auctions dashboard on auction start

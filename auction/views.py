@@ -20,7 +20,7 @@ class Room(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         """Provide participant list"""
         context = super().get_context_data(**kwargs)
-        context['participants'] = Club.objects.all()
+        context['clubs'] = Club.objects.all()
         return context
 
 
