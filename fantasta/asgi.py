@@ -11,7 +11,7 @@ from auction.urls import socket_patterns
 environ.setdefault('DJANGO_SETTINGS_MODULE', 'fantasta.settings')
 asgi_app = get_asgi_application()
 
-# import auction.urls
+import auction.urls
 
 application = ProtocolTypeRouter(
     {
