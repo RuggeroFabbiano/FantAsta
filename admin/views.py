@@ -9,6 +9,6 @@ class Log(TemplateView):
     def get_context_data(self, **kwargs):
         """Pass log content to template"""
         context = super().get_context_data(**kwargs)
-        with open(F"/logs/{kwargs['file']}.log", 'r', encoding='UTF8') as log:
+        with open(F"/logs/{kwargs['tool']}.log", 'r', encoding='UTF8') as log:
             context['content'] = log.read().strip('\n')
         return context
