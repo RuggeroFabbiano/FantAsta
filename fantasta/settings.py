@@ -101,9 +101,9 @@ if ENV == 'dev':
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
     ADMINS = [('Ruggero Fabbiano', 'ruggero_fabbiano@outlook.com')]
-    ALLOWED_HOSTS = ['testncgd.kfirjgyswf.dopraxrocks.com']
+    ALLOWED_HOSTS = ['fantasta.net']
     # CSRF_COOKIE_SECURE = True
-    CSRF_TRUSTED_ORIGINS = ['https://testncgd.kfirjgyswf.dopraxrocks.com']
+    CSRF_TRUSTED_ORIGINS = ['https://fantasta.net']
     EMAIL_HOST = 'smtp.gmail.com'
     EMAIL_HOST_PASSWORD = environ['EMAIL_PASSWORD']
     EMAIL_HOST_USER = DEFAULT_FROM_EMAIL
