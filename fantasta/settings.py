@@ -102,7 +102,7 @@ if ENV == 'dev':
 else:
     ADMINS = [('Ruggero Fabbiano', 'ruggero_fabbiano@outlook.com')]
     ALLOWED_HOSTS = ['fantasta.net']
-    # CSRF_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
     CSRF_TRUSTED_ORIGINS = ['https://fantasta.net']
     EMAIL_HOST = 'smtp.gmail.com'
     EMAIL_HOST_PASSWORD = environ['EMAIL_PASSWORD']
@@ -110,11 +110,10 @@ else:
     EMAIL_PORT = 587
     EMAIL_USE_SSL = False
     EMAIL_USE_TLS = True
-    # SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    # SECURE_HSTS_PRELOAD = True
-    # SECURE_HSTS_SECONDS = 31536000 # 1 year
-    # SECURE_REDIRECT_EXEMPT = ['/health-check']
-    # SECURE_SSL_REDIRECT = True
-    # SERVER_EMAIL = 'ruggero_fabbiano@outlook.com'
-    # SESSION_COOKIE_SECURE = True
-    # SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_HSTS_SECONDS = 31536000 # 1 year
+    SECURE_SSL_REDIRECT = True
+    SERVER_EMAIL = 'ruggero_fabbiano@outlook.com'
+    SESSION_COOKIE_SECURE = True
+    SESSION_EXPIRE_AT_BROWSER_CLOSE = True
