@@ -8,7 +8,7 @@
 
   {% comment %} PARTICIPANT LIST TO SHOW BEFORE STARTING {% endcomment %}
   <div id="participants">
-    {% for club in participants %}
+    {% for club in clubs %}
       <p class="{{club.user}}" style="display: none">
         <span style="color: var(--{{club.label}})">{{club}}</span>
         è entrato nell'asta

@@ -18,13 +18,9 @@ class Room(LoginRequiredMixin, TemplateView):
     template_name = 'auction/auction.html'
 
     def get_context_data(self, **kwargs):
-        """
-        Provide participant list both as objects and as serialised data
-        """
+        """Provide participant list"""
         context = super().get_context_data(**kwargs)
-        clubs = Club.objects.all()
-        context['participants'] = clubs
-        context['clubs'] = list(clubs.values_list('name', flat=True))
+        context['participants'] = Club.objects.all()
         return context
 
 
@@ -34,30 +30,21 @@ class PlayerList(View):
     def get(self, request, *args, **kwargs):
         """GET request"""
         players = Player.objects.filter(role=kwargs['role'], club__isnull=True)
-        data = [{'id': p.id, 'name': p.name, 'team': p.team, 'price': p.price} for p in players]
+        data = [
+            {
+                'id': p.id,
+                'name': p.name,
+                'team': p.team,
+                'price': p.price
+            } for p in players
+        ]
         return JsonResponse(data, safe=False)
 
 
-# class PlayerDetail(View):
-#     """On AJAX requests, send details of chosen player"""
-
-#     def get(self, request, *args, **kwargs):
-#         """GET request"""
-#         players = Player.objects.filter(role=kwargs['role'], club__isnull=True)
-#         data = [{'id': p.id, 'name': p.name, 'team': p.team, 'price': p.price} for p in players]
-#         return JsonResponse(data, safe=False)
-
-
-
-
-
-
-
+# CHAT
 
 def index(request):
     return render(request, "auction/index.html")
-
-
 
 def room(request, room_name):
     return render(request, "auction/room.html", {"room_name": room_name})
