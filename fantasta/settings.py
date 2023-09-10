@@ -13,8 +13,7 @@ AUTH_PASSWORD_VALIDATORS = [
 BASE_DIR = Path(__file__).resolve().parent.parent
 CRISPY_ALLOWED_TEMPLATE_PACKS = CRISPY_TEMPLATE_PACK = 'bootstrap5'
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER = 'ruggero.fabbiano@gmail.com'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'ruggero.fabbiano@gmail.com'
 ENV = getenv('ENVIRONMENT', 'dev')
 INSTALLED_APPS = [
     'daphne',
@@ -98,11 +97,19 @@ DATABASES = {
 }
 DEBUG = True # ENV == 'dev'
 
-if ENV == 'prod':
+if ENV == 'dev':
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
     ADMINS = [('Ruggero Fabbiano', 'ruggero_fabbiano@outlook.com')]
     ALLOWED_HOSTS = ['testncgd.kfirjgyswf.dopraxrocks.com']
     # CSRF_COOKIE_SECURE = True
     CSRF_TRUSTED_ORIGINS = ['https://testncgd.kfirjgyswf.dopraxrocks.com']
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_HOST_PASSWORD = environ['EMAIL_PASSWORD']
+    EMAIL_HOST_USER = DEFAULT_FROM_EMAIL
+    EMAIL_PORT = 587
+    EMAIL_USE_SSL = False
+    EMAIL_USE_TLS = True
     # SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     # SECURE_HSTS_PRELOAD = True
     # SECURE_HSTS_SECONDS = 31536000 # 1 year
