@@ -55,7 +55,6 @@ class Consumer(WebsocketConsumer):
 
     def broadcast(self, data: dict) -> None:
         """Broadcast message as-is"""
-        del data['type']
         self.send(text_data=dumps(data))
 
     def set_next_round(self, data: dict) -> None:
