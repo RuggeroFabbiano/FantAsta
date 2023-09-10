@@ -13,13 +13,9 @@
         <script>
             const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
-            const chatSocket = new WebSocket(
-                'wss://'
-                + window.location.host
-                + '/ws/asta/room/'
-                + roomName
-                + '/'
-            );
+            const address = 'wss://' + window.location.host + '/ws/asta/room/' + roomName + '/'
+            const chatSocket = new WebSocket(address);
+            console.log(address);
 
             chatSocket.onmessage = function(e) {
                 const data = JSON.parse(e.data);
@@ -27,6 +23,7 @@
             };
 
             chatSocket.onclose = function(e) {
+                console.log(e);
                 console.error('Chat socket closed unexpectedly');
             };
 
