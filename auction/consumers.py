@@ -29,7 +29,7 @@ class Consumer(WebsocketConsumer):
         payload = loads(text_data)
         group_send = async_to_sync(self.channel_layer.group_send)
         event = payload['event']
-        # Join acution, new bid received, auction stop
+        # Join auction / new bid received / auction stop
         if event in ['join', 'new_bid', 'stop_auction']:
             data = payload
             data['type'] = 'broadcast'

@@ -1,5 +1,7 @@
 // INITIALISATION
-const socket = new WebSocket("wss://" + window.location.host + "/ws" + "{{request.path}}");
+const host = window.location.host;
+const protocol = host.startsWith("localhost")? "ws" : "wss";
+const socket = new WebSocket(protocol + "://" + host + "/ws" + "{{request.path}}");
 var waitingForCall = true;
 var callTimeout = 0;
 var bidTimeout = 0;
@@ -8,7 +10,7 @@ var bidTimeout = 0;
 // ACTIONS (SEND MESSAGES)
 
 // Send auction-joined confirmation
-socket.onopen = function(event) {send({"event": "join", "club": "{{request.user}}"});};
+socket.onopen = function(event) {send({"event": "join", "club": "{{request.user.club}}"});};
 
 /**
  * Toggle auction activation/pause
