@@ -16,5 +16,5 @@ urlpatterns = [
 socket_patterns = [
     re_path("ws/asta/", Consumer.as_asgi()),
     # CHAT
-    re_path(r"ws/asta/(?P<room_name>\w+)/$", ChatConsumer.as_asgi())
+    re_path(r"ws/asta/room/(?P<room_name>\w+)/$", ChatConsumer.as_asgi())
 ]
