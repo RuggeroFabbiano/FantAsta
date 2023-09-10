@@ -29,7 +29,7 @@ INSTALLED_APPS = [
     'auction'
 ]
 LANGUAGE_CODE = 'it-it'
-LOGIN_REDIRECT_URL = 'waiting_room'
+LOGIN_REDIRECT_URL = 'rules'
 LOGIN_URL = 'log-in'
 LOGOUT_REDIRECT_URL = '/'
 MIDDLEWARE = [
