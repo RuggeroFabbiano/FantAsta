@@ -92,7 +92,7 @@ DATABASES = {
         'PORT': '3306',
         'USER': 'DjangoDB',
         'HOST': 'mysql8',
-        'PASSWORD': environ['DB_PASSWORD']
+        'PASSWORD': environ['MYSQL_PASSWORD']
     }
 }
 DEBUG = True # ENV == 'dev'
