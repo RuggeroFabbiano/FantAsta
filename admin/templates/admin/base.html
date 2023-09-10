@@ -146,7 +146,14 @@
                   <tbody>
                     <tr>
                       <th scope="row">
-                        <a href="{% url 'admin-log' %}">Registro</a>
+                        <a href="{% url 'admin-log' tool='gunicorn' %}">Registro GUnicorn</a>
+                      </th>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th scope="row">
+                        <a href="{% url 'admin-log' tool='daphne' %}">Registro Daphne</a>
                       </th>
                       <td></td>
                       <td></td>

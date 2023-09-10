@@ -6,7 +6,7 @@ from . import views
 
 
 urlpatterns = [
-    path("admin/log", Log.as_view(), name="admin-log"),
+    path("admin/log/<str:tool>", Log.as_view(), name="admin-log"),
     path("admin/", admin.site.urls),
     path('', views.Home.as_view()),
     path("connessione/<int:id>", views.SendPassowrd.as_view(), name="sign-in"),

@@ -89,9 +89,9 @@ DATABASES = {
     } if ENV == 'dev' else {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ProdDB',
+        'HOST': 'mysql8',
         'PORT': '3306',
         'USER': 'DjangoDB',
-        'HOST': 'mysql8',
         'PASSWORD': environ['MYSQL_PASSWORD']
     }
 }
