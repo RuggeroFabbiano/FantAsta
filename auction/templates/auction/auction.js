@@ -114,14 +114,17 @@ function showAuctionDashboard() {
  */
 function setPlayerChoice(club, role) {
     $("#selection-result").hide();
+    const fullRole = getRole(role);
     if ("{{request.user.club}}" === club) {
-        const fullRole = getRole(role);
         $("#player-selector").html(`<option value="">Scegli un ${fullRole}</option>`);
         setPlayerSelector(club, role);
         $("#selection-choice").show();
         $("#selection-wait").hide();
     }
     else {
+        $("#selection-wait").html(`
+            <p style="margin: auto">${club} sta scegliendo un ${fullRole}...</p>
+        `);
         $("#selection-choice").hide();
         $("#selection-wait").show();
     }
