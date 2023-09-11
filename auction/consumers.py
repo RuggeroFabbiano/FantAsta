@@ -37,12 +37,6 @@ class Consumer(WebsocketConsumer):
         # Auction start
         if event == 'start_auction':
             # self._set_first_turn()
-
-            clubs = Club.objects
-            club = clubs.filter(next_call__isnull=False) or clubs.first()
-            self.c = self.clubs.index(club.name)
-            self.r = self.roles.index(club.next_call or 'P')
-
             data = {'event': 'start_auction', 'type': 'set.next.round'}
         # New-turn start
         elif event == 'continue':
@@ -76,6 +70,11 @@ class Consumer(WebsocketConsumer):
 
     def set_next_round(self, data: dict) -> None:
         """Launch next round"""
+        clubs = Club.objects
+        club = clubs.filter(next_call__isnull=False) or clubs.first()
+        self.c = self.clubs.index(club.name)
+        self.r = self.roles.index(club.next_call or 'P')
+
         self.phase = "awaiting choice"
         payload = {
             'event': data['event'],
