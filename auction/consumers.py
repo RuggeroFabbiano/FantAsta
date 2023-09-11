@@ -34,14 +34,9 @@ class Consumer(WebsocketConsumer):
         payload = loads(text_data)
         group_send = async_to_sync(self.channel_layer.group_send)
         event = payload['event']
-        # Auction start
-        if event == 'start_auction':
-            # self._set_first_turn()
-            data = {'event': 'start_auction', 'type': 'set.next.round'}
-        # New-turn start
-        elif event == 'continue':
-            self._set_next_turn()
-            data = {'event': 'continue', 'type': 'set.next.round'}
+        # Auction start / New-round start
+        if event in ['start_auction', 'continue']:
+            data = {'event': event, 'type': 'set.next.round'}
         # Start bid round
         elif event == 'start_bid':
             data = payload
@@ -70,11 +65,7 @@ class Consumer(WebsocketConsumer):
 
     def set_next_round(self, data: dict) -> None:
         """Launch next round"""
-        clubs = Club.objects
-        club = clubs.filter(next_call__isnull=False) or clubs.first()
-        self.c = self.clubs.index(club.name)
-        self.r = self.roles.index(club.next_call or 'P')
-
+        self._set_next_round()
         self.phase = "awaiting choice"
         payload = {
             'event': data['event'],
@@ -110,18 +101,17 @@ class Consumer(WebsocketConsumer):
         group_discard = async_to_sync(self.channel_layer.group_discard)
         group_discard(self.group, self.channel_name)
 
-    def _set_first_turn(self) -> None:
-        """Set starting turn"""
-        clubs = Club.objects
-        club = clubs.filter(next_call__isnull=False) or clubs.first()
-        self.c = self.clubs.index(club.name)
-        self.r = self.roles.index(club.next_call or 'P')
-
-    def _set_next_turn(self) -> None:
-        """Set next turn"""
-        self.r = (self.r + 1) % 4
-        if self.r == 0:
-            self.c = (self.c + 1) % len(self.clubs)
+    def _set_next_round(self) -> None:
+        """Set caller club and to-call role for next turn"""
+        if self.c is None:  # first auction turn: init.
+            clubs = Club.objects
+            club = clubs.filter(next_call__isnull=False) or clubs.first()
+            self.c = self.clubs.index(club.name)
+            self.r = self.roles.index(club.next_call or 'P')
+        else:
+            self.r = (self.r + 1) % 4
+            if self.r == 0:
+                self.c = (self.c + 1) % len(self.clubs)
 
     def _buy_player(self, data: dict) -> None:
         """Buy player of current bid"""

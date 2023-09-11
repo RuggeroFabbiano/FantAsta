@@ -53,7 +53,7 @@ socket.onmessage = function(event) {
     switch (payload.event) {
         case "join":
             phase = payload.phase;
-            if (phase === "awaiting participants") {
+            if (phase !== "awaiting participants") {
                 setParticipants(payload.participants);
                 if (payload.participants.length === payload.total) {
                     $("#start-stop").prop("disabled", false);
@@ -103,7 +103,7 @@ function setParticipants(participants) {
  */
 function showAuctionDashboard() {
     $("#page-container").css("background-color", "white");
-    $("#participants").css("display", "none !important");
+    $("#participants").hide();
     $("#auction-dashboard").show();
 }
 
@@ -113,13 +113,18 @@ function showAuctionDashboard() {
  * @param {String} role letter indicating the role of players for the current round
  */
 function setPlayerChoice(club, role) {
+    $("#selection-result").hide();
     if ("{{request.user.club}}" === club) {
         const fullRole = getRole(role);
         $("#player-selector").html(`<option value="">Scegli un ${fullRole}</option>`);
         setPlayerSelector(club, role);
-        $("selector-container").show();
+        $("#selection-choice").show();
+        $("#selection-wait").hide();
     }
-    else {$("selector-container").hide();}
+    else {
+        $("#selection-choice").hide();
+        $("#selection-wait").show();
+    }
 }
 
 /**

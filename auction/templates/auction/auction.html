@@ -8,7 +8,7 @@
   <div id="page-container" style="width: 100vw; height: 100vh; background-color: lightgrey">
 
     {% comment %} PARTICIPANT LIST TO SHOW BEFORE STARTING {% endcomment %}
-    <div id="participants" class="d-flex flex-column">
+    <div id="participants">
       {% for club in clubs %}
         <p class="{{club.user}}" style="margin: 0; display: none">
           <span class="{{club.label}}-inv">{{club.user}}</span>
@@ -27,15 +27,30 @@
     {% comment %} AUCTION DASHBOARD {% endcomment %}
     <div id="auction-dashboard" style="display: none; border: 1pt solid black">
 
-      {% comment %} Player selector {% endcomment %}
-      <div id="selector-container" class="d-flex justify-content-around" style="background-color: DarkMagenta; padding: 0.5rem 0">
-        <div class="d-flex" style="color: white">
-          <p style="margin: auto">È il tuo turno!</p>
+      {% comment %} Player selection {% endcomment %}
+      <div style="height: 80px; padding: 10px 20px">
+        {% comment %} User of current round {% endcomment %}
+        <div id="selection-choice" class="selection">
+          <div class="d-flex">
+            <p style="margin: auto">È il tuo turno!</p>
+          </div>
+          <div class="d-flex" style="height: 40px; margin: auto 0">
+            <select id="player-selector" class="form-select"></select>
+            <span style="width: 50px"></span>
+            <button id="select-player" onclick="selectPlayer()">OK</button>
+          </div>
         </div>
-        <div class="d-flex">
-          <select id="player-selector" class="form-select"></select>
-          <span style="width: 50px"></span>
-          <button id="select-player" onclick="selectPlayer()">OK</button>
+        {% comment %} Other users {% endcomment %}
+        <div id="selection-wait" class="selection">
+          Aspettando che il tizio scelga...
+        </div>
+        {% comment %} Selection result {% endcomment %}
+        <div id="selection-result" class="selection">
+          <p>Chiamata</p>
+          <p>Onana</p>
+          <p>portiere</p>
+          <p>Inter</p>
+          <p>40 M</p>
         </div>
       </div>
 
