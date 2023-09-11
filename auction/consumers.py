@@ -9,13 +9,18 @@ from .models import ROLES, Club, Player
 class Consumer(WebsocketConsumer):
     """Socket consumer: handle and dispatch messages"""
 
-    group = 'asta'
-    participants = []
-    phase = 'awaiting participants'
-    clubs = list(Club.objects.values_list('name', flat=True))
-    roles = [r for r,_ in ROLES]
-    c = r = None
-    player = None
+    def __init__(self):
+        """Init."""
+        clubs = Club.objects
+        self.group = 'asta'
+        self.participants = []
+        self.phase = 'awaiting participants'
+        self.clubs = list(clubs.values_list('name', flat=True))
+        self.roles = [r for r,_ in ROLES]
+        club = clubs.filter(next_call__isnull=False) or clubs.first()
+        self.c = self.clubs.index(club.name)
+        self.r = self.roles.index(club.next_call or 'P')
+        self.player = None
 
     def connect(self):
         """Open web-socket connection"""
@@ -36,7 +41,6 @@ class Consumer(WebsocketConsumer):
         event = payload['event']
         # Auction start
         if event == 'start_auction':
-            self._set_first_turn()
             data = {'event': 'start_auction', 'type': 'set.next.round'}
         # New-turn start
         elif event == 'continue':
@@ -104,16 +108,6 @@ class Consumer(WebsocketConsumer):
         group_send(self.group, {'type': 'update.participants'})
         group_discard = async_to_sync(self.channel_layer.group_discard)
         group_discard(self.group, self.channel_name)
-
-    def _set_first_turn(self) -> None:
-        """Set starting turn"""
-        clubs = Club.objects
-        club = clubs.filter(next_call__isnull=False) or clubs.first()
-        print("Adesso metto C")
-        self.c = self.clubs.index(club.name)
-        print("Messo")
-        print(self.c)
-        self.r = self.roles.index(club.next_call or 'P')
 
     def _set_next_turn(self) -> None:
         """Set next turn"""
