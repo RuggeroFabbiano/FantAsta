@@ -34,12 +34,8 @@ class Consumer(WebsocketConsumer):
         payload = loads(text_data)
         group_send = async_to_sync(self.channel_layer.group_send)
         event = payload['event']
-        # Join auction
-        if event == 'join':
-            self.participants.add(payload['user'])
-            data = {'type': 'update.participants'}
         # Auction start
-        elif event == 'start_auction':
+        if event == 'start_auction':
             self._set_first_turn()
             data = {'event': 'start_auction', 'type': 'set.next.round'}
         # New-turn start
@@ -62,7 +58,7 @@ class Consumer(WebsocketConsumer):
         # Dispatch
         group_send(self.group, data)
 
-    def update_participants(self, data: dict) -> None:
+    def update_participants(self) -> None:
         """Set participant list"""
         payload = {
             'event': 'join',
@@ -101,6 +97,9 @@ class Consumer(WebsocketConsumer):
 
     def disconnect(self, code):
         """Leave auction"""
+        self.participants.remove(self.scope['user'].username)
+        group_send = async_to_sync(self.channel_layer.group_send)
+        group_send(self.group, {'type': 'update.participants'})
         group_discard = async_to_sync(self.channel_layer.group_discard)
         group_discard(self.group, self.channel_name)
 
