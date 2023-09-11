@@ -51,6 +51,24 @@ a {
 }
 .team8 {background-color: var(--team8)}
 
+.team1-inv {
+  background-color: black;
+  color: var(--team1);
+}
+.team2-inv {
+  background-color: black;
+  color: var(--team2);
+}
+.team3-inv {color: var(--team3)}
+.team4-inv {color: var(--team4)}
+.team5-inv {color: var(--team5)}
+.team6-inv {color: var(--team6)}
+.team7-inv {color: var(--team7)}
+.team8-inv {
+  background-color: black;
+  color: var(--team8);
+}
+
 .asteriskField {display: none}
 label {margin-top: 1rem}
 .form-control, .select {border: 1pt solid DarkMagenta}

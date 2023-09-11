@@ -10,7 +10,7 @@
   <div id="participants" class="d-flex flex-column">
     {% for club in clubs %}
       <p class="{{club.user}}" style="margin: 0; display: none">
-        <span style="color: var(--{{club.label}})">{{club.user}}</span>
+        <span class="{{club.label}}-inv">{{club.user}}</span>
         è entrato nell'asta
       </p>
     {% endfor %}
