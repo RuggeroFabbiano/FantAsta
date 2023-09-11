@@ -58,7 +58,7 @@ class Consumer(WebsocketConsumer):
         # Dispatch
         group_send(self.group, data)
 
-    def update_participants(self) -> None:
+    def update_participants(self, data: dict) -> None:
         """Set participant list"""
         payload = {
             'event': 'join',
