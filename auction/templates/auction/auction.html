@@ -5,48 +5,64 @@
 {% block head_title %}La FantAsta{% endblock %}
 
 {% block body %}
+  <div id="page-container" style="width: 100vw; height: 100vh; background-color: lightgrey">
 
-  {% comment %} PARTICIPANT LIST TO SHOW BEFORE STARTING {% endcomment %}
-  <div id="participants" class="d-flex flex-column">
-    {% for club in clubs %}
-      <p class="{{club.user}}" style="margin: 0; display: none">
-        <span class="{{club.label}}-inv">{{club.user}}</span>
-        è entrato nell'asta
-      </p>
-    {% endfor %}
-  </div>
+    {% comment %} PARTICIPANT LIST TO SHOW BEFORE STARTING {% endcomment %}
+    <div id="participants" class="d-flex flex-column">
+      {% for club in clubs %}
+        <p class="{{club.user}}" style="margin: 0; display: none">
+          <span class="{{club.label}}-inv">{{club.user}}</span>
+          è pronto per l'asta...
+        </p>
+      {% endfor %}
+    </div>
 
-  {% comment %} START/STOP BUTTON {% endcomment %}
-  {% if request.user.is_superuser %}
-    <button id="start-stop" onclick="startStop(this)">Avvia</button>
-  {% endif %}
+    {% comment %} START/STOP BUTTON {% endcomment %}
+    {% if request.user.is_superuser %}
+      <div class="text-center" style="background-color: AntiqueWhite; padding: 0.5rem 0">
+        <button id="start-stop" onclick="startStop(this)">Avvia</button>
+      </div>
+    {% endif %}
 
-  {% comment %} AUCTION INFO {% endcomment %}
-  <div id="auction-info" style="display: none; background-color: aqua">
-    <p>Scelto: {{player}}</p>
-    <p>Rilancio attuale: {{club}} {{rilancio}}</p>
-    <p>TMPO FINITO: {{player}} acquistato da {{club}} per {{value}} <span class="currency">M</span></p>
-  </div>
+    {% comment %} AUCTION DASHBOARD {% endcomment %}
+    <div id="auction-dashboard" style="display: none; border: 1pt solid black">
 
-  {% comment %} PLAYER SELECTORS {% endcomment %}
-  <div id="player-selector-container" style="display: none">
-    <select id="player-selector"></select>
-    <button id="select-player" onclick="selectPlayer()">Avvia</button>
-  </div>
+      {% comment %} Player selector {% endcomment %}
+      <div id="selector-container" class="d-flex justify-content-around" style="background-color: DarkMagenta; padding: 0.5rem 0">
+        <div class="d-flex" style="color: white">
+          <p style="margin: auto">È il tuo turno!</p>
+        </div>
+        <div class="d-flex">
+          <select id="player-selector" class="form-select"></select>
+          <span style="width: 50px"></span>
+          <button id="select-player" onclick="selectPlayer()">OK</button>
+        </div>
+      </div>
 
-  {% comment %} BID TOOLS {% endcomment %}
-  <div id="auction-chat" style="display: none; background-color: fuchsia">
-    <button id="raise-1" type="button" class="bid-button" onclick="raiseBid(1)">+1</button>
-    <button id="raise-5" type="button" class="bid-button" onclick="raiseBid(5)">+5</button>
-    <button id="raise-10" type="button" class="bid-button" onclick="raiseBid(10)">+10</button>
-    <input id="raise-custom" type="number" placeholder="inserisci rilancio"/>
-    <button id="bid" type="button" class="bid-button" onclick="raiseBid(parseInt($('#raise-custom').val()))">
-      Rilancia
-    </button>
-  </div>
+      {% comment %} Round info {% endcomment %}
+      <div id="auction-info" style="background-color: aqua">
+        <p>Scelto: {{player}}</p>
+        <p>Rilancio attuale: {{club}} {{rilancio}}</p>
+        <p>TMPO FINITO: {{player}} acquistato da {{club}} per {{value}} <span class="currency">M</span></p>
+      </div>
 
-  {% comment %} TEAMS INFO {% endcomment %}
-  <div id="teams-info" style="display: none; background-color: green; width: 100px; height: 100px">
+      {% comment %} Bid tools {% endcomment %}
+      <div id="auction-chat" style="background-color: fuchsia">
+        <button id="raise-1" type="button" class="bid-button" onclick="raiseBid(1)">+1</button>
+        <button id="raise-5" type="button" class="bid-button" onclick="raiseBid(5)">+5</button>
+        <button id="raise-10" type="button" class="bid-button" onclick="raiseBid(10)">+10</button>
+        <input id="raise-custom" type="number" placeholder="inserisci rilancio"/>
+        <button id="bid" type="button" class="bid-button" onclick="raiseBid(parseInt($('#raise-custom').val()))">
+          Rilancia
+        </button>
+      </div>
+
+    </div>
+
+    {% comment %} TEAMS INFO {% endcomment %}
+    <div id="teams-info" style="display: none; background-color: green; width: 100px; height: 100px">
+    </div>
+
   </div>
 
   <script type="text/javascript">{% include "auction/auction.js" %}</script>

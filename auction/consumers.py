@@ -11,7 +11,7 @@ class Consumer(WebsocketConsumer):
 
     group = 'asta'
     participants = []
-    phase = 'waiting participants'
+    phase = 'awaiting participants'
     clubs = list(Club.objects.values_list('name', flat=True))
     roles = [r for r,_ in ROLES]
     c = r = None
@@ -21,10 +21,10 @@ class Consumer(WebsocketConsumer):
         """Open web-socket connection"""
         group_add = async_to_sync(self.channel_layer.group_add)
         group_add(self.group, self.channel_name)
+        self.accept()
         self.participants.append(self.scope['user'].username)
         group_send = async_to_sync(self.channel_layer.group_send)
         group_send(self.group, {'type': 'update.participants'})
-        self.accept()
 
     def receive(self, text_data=None, bytes_data=None):
         """
@@ -63,12 +63,14 @@ class Consumer(WebsocketConsumer):
         payload = {
             'event': 'join',
             'participants': self.participants,
+            'total': len(self.clubs),
             'phase': self.phase
         }
         self.send(text_data=dumps(payload))
 
     def set_next_round(self, data: dict) -> None:
         """Launch next round"""
+        self.phase = "awaiting choice"
         payload = {
             'event': data['event'],
             'club': self.clubs[self.c],
