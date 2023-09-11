@@ -80,3 +80,14 @@ label {margin-top: 1rem}
 }
 
 .currency {text-decoration-line: line-through}
+
+#participants {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: smaller;
+  padding: 1rem;
+  border: 1pt solid DarkMagenta;
+  border-radius: 10px;
+}

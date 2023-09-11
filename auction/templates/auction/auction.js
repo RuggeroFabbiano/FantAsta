@@ -53,7 +53,6 @@ socket.onmessage = function(event) {
     switch (data.event) {
         case "join":
             phase = data.phase;
-            console.log(data.participants);
             if (phase === "waiting participants") {setParticipants(data.participants)};
             break;
         case "start_auction":

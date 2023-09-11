@@ -7,10 +7,10 @@
 {% block body %}
 
   {% comment %} PARTICIPANT LIST TO SHOW BEFORE STARTING {% endcomment %}
-  <div id="participants">
+  <div id="participants" class="d-flex flex-column">
     {% for club in clubs %}
-      <p class="{{club.user}}" style="display: none">
-        <span style="color: var(--{{club.label}})">{{club}}</span>
+      <p class="{{club.user}}" style="margin: 0; display: none">
+        <span style="color: var(--{{club.label}})">{{club.user}}</span>
         è entrato nell'asta
       </p>
     {% endfor %}
