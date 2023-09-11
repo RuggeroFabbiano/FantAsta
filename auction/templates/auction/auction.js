@@ -2,15 +2,12 @@
 const host = window.location.host;
 const protocol = host.startsWith("localhost")? "ws" : "wss";
 const socket = new WebSocket(protocol + "://" + host + "/ws" + "{{request.path}}");
-var waitingForCall = true;
+var phase;
 var callTimeout = 0;
 var bidTimeout = 0;
 
 
 // ACTIONS (SEND MESSAGES)
-
-// Send auction-joined confirmation
-socket.onopen = function(event) {send({"event": "join", "user": "{{request.user}}"});};
 
 /**
  * Toggle auction activation/pause
@@ -55,7 +52,8 @@ socket.onmessage = function(event) {
     const data = JSON.parse(event.data);
     switch (data.event) {
         case "join":
-            addParticipant(data.user);
+            phase = data.phase;
+            if (phase === "waiting participants") {setParticipants(data.participants)};
             break;
         case "start_auction":
             showAuctionDashboard();
@@ -83,10 +81,15 @@ socket.onmessage = function(event) {
 };
 
 /**
- * Add participant to the group
- * @param {String} user attengin user
+ * Show participants in waiting room
+ * @param {String} participants connected users
  */
-function addParticipant(user) {$(`#participants > .${user}`).show();}
+function setParticipants(participants) {
+    $("#participants > p").each(function() {
+        if (participants.includes($(this).attr("class"))) {$(this).show();}
+        else {$(this).hide();}
+    });
+}
 
 /**
  * Show auctions dashboard on auction start

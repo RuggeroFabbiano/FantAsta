@@ -10,6 +10,8 @@ class Consumer(WebsocketConsumer):
     """Socket consumer: handle and dispatch messages"""
 
     group = 'asta'
+    participants = []
+    phase = 'waiting participants'
     clubs = list(Club.objects.values_list('name', flat=True))
     roles = [r for r,_ in ROLES]
     c = r = None
@@ -19,6 +21,9 @@ class Consumer(WebsocketConsumer):
         """Open web-socket connection"""
         group_add = async_to_sync(self.channel_layer.group_add)
         group_add(self.group, self.channel_name)
+        self.participants.append(self.scope['user'].username)
+        group_send = async_to_sync(self.channel_layer.group_send)
+        group_send(self.group, {'type': 'update.participants'})
         self.accept()
 
     def receive(self, text_data=None, bytes_data=None):
@@ -29,10 +34,10 @@ class Consumer(WebsocketConsumer):
         payload = loads(text_data)
         group_send = async_to_sync(self.channel_layer.group_send)
         event = payload['event']
-        # Join auction / new bid received / auction stop
-        if event in ['join', 'new_bid', 'stop_auction']:
-            data = payload
-            data['type'] = 'broadcast'
+        # Join auction
+        if event == 'join':
+            self.participants.add(payload['user'])
+            data = {'type': 'update.participants'}
         # Auction start
         elif event == 'start_auction':
             self._set_first_turn()
@@ -45,6 +50,10 @@ class Consumer(WebsocketConsumer):
         elif event == 'start_bid':
             data = payload
             data['type'] = 'start.bid'
+        # New bid received / auction stop
+        if event in ['new_bid', 'stop_auction']:
+            data = payload
+            data['type'] = 'broadcast'
         # Assign player
         elif event == 'buy':
             self._buy_player(payload)
@@ -53,9 +62,14 @@ class Consumer(WebsocketConsumer):
         # Dispatch
         group_send(self.group, data)
 
-    def broadcast(self, data: dict) -> None:
-        """Broadcast message as-is"""
-        self.send(text_data=dumps(data))
+    def update_participants(self, data: dict) -> None:
+        """Set participant list"""
+        payload = {
+            'event': 'join',
+            'participants': self.participants,
+            'phase': self.phase
+        }
+        self.send(text_data=dumps(payload))
 
     def set_next_round(self, data: dict) -> None:
         """Launch next round"""
@@ -76,6 +90,10 @@ class Consumer(WebsocketConsumer):
             'player_role': self.player.role
         }
         self.send(text_data=dumps(payload))
+
+    def broadcast(self, data: dict) -> None:
+        """Broadcast message as-is"""
+        self.send(text_data=dumps(data))
 
     def buy(self, data: dict) -> None:
         """Assign player of current bid"""
