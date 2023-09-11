@@ -36,7 +36,13 @@ class Consumer(WebsocketConsumer):
         event = payload['event']
         # Auction start
         if event == 'start_auction':
-            async_to_sync(self._set_first_turn)()
+            # self._set_first_turn()
+
+            clubs = Club.objects
+            club = clubs.filter(next_call__isnull=False) or clubs.first()
+            self.c = self.clubs.index(club.name)
+            self.r = self.roles.index(club.next_call or 'P')
+
             data = {'event': 'start_auction', 'type': 'set.next.round'}
         # New-turn start
         elif event == 'continue':
