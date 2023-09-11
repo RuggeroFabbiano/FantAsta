@@ -103,7 +103,7 @@ function setParticipants(participants) {
  */
 function showAuctionDashboard() {
     $("#page-container").css("background-color", "white");
-    $("#participants").hide();
+    $("#participants").css("display", "none !important");
     $("#auction-dashboard").show();
 }
 
@@ -137,11 +137,7 @@ function setPlayerChoice(club, role) {
  */
 function setPlayerSelector(club, roleIndex) {
     $.get("{% url 'players' role='-' %}".replace("-", roleIndex)).done(function(data) {
-        console.log(data);
         for (let player of data) {
-            console.log(player.id);
-            console.log(player.name);
-            console.log(player.team);
             $("#player-selector").append(`
                 <option value="${player.id}">${player.name} (${player.team})</option>
             `);

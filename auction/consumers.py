@@ -109,7 +109,10 @@ class Consumer(WebsocketConsumer):
         """Set starting turn"""
         clubs = Club.objects
         club = clubs.filter(next_call__isnull=False) or clubs.first()
+        print("Adesso metto C")
         self.c = self.clubs.index(club.name)
+        print("Messo")
+        print(self.c)
         self.r = self.roles.index(club.next_call or 'P')
 
     def _set_next_turn(self) -> None:
