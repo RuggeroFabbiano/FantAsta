@@ -66,7 +66,7 @@ socket.onmessage = function(event) {
             phase = "awaiting choice";
             stopBids();
             setPlayerChoice(payload.club, payload.role);
-            if ("{{request.user.club}}" === club) {startCountDown("call");}
+            if ("{{request.user.club}}" === payload.club) {startCountDown("call");}
             break;
         case "start_bid":
             phase = "bids";
