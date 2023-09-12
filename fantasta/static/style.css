@@ -152,6 +152,13 @@ button[disabled] {
   padding: 1rem;
 }
 
+#current-bid {
+  height: 200px;
+  border-radius: 15px;
+  padding: 1rem 3rem;
+  margin: auto 0;
+}
+
 #bid-countdown-container {
   border: 1pt solid DarkMagenta;
   height: 50pt;

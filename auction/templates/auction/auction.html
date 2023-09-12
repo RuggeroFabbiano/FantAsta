@@ -26,7 +26,9 @@
 
     {% comment %} AUCTION DASHBOARD {% endcomment %}
     <div id="auction-dashboard" style="display: none">
-      <div class="d-flex flex-column" style="height: calc(100vh - 50px)">
+      <div class="d-flex flex-column"
+        style="height: {% if request.user.is_superuser%}calc(100vh - 50px){% else %}100vh{% endif %}"
+      >
 
         {% comment %} Player selection {% endcomment %}
         <div style="height: 80px; padding: 10px 20px">
@@ -58,13 +60,13 @@
         </div>
 
         {% comment %} Round info {% endcomment %}
-        <div id="bid-info" class="flex-grow-1 d-flex justify-content-around" style="visibility: hidden">
-          <div id="current-bid" style="padding: 1rem 3rem; border-radius: 15px">
+        <div id="bid-info" class="flex-grow-1 d-flex justify-content-around" style="visibility: visible">
+          <div id="current-bid">
             <p class="text-center" style="font-size: 48pt">
               <span id="bid-amount"></span>
               <span class="currency">M</span>
             </p>
-            <p id="bidder" class="text-center" style="font-size: 14pt"></p>
+            <p id="bidder" class="text-center" style="font-size: 14pt">ccx</p>
           </div>
           <div class="d-flex">
             <div id="bid-countdown-container">
