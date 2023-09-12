@@ -78,6 +78,7 @@ class Consumer(WebsocketConsumer):
         """Select a new player and open bids"""
         self.player = Player.objects.get(id=data['player'])
         payload = {
+            'event': 'start_bid',
             'id': self.player.id,
             'name': self.player.name,
             'role': self.player.role,
