@@ -52,7 +52,7 @@ socket.onmessage = function(event) {
     switch (payload.event) {
         case "join":
             phase = payload.phase;
-            if (phase !== "awaiting participants") { // TEMP
+            if (phase === "awaiting participants") { // TEMP
                 setParticipants(payload.participants);
                 if (payload.participants.length === payload.total) {
                     $("#start-stop").prop("disabled", false);
