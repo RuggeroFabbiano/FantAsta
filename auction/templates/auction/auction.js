@@ -72,7 +72,7 @@ socket.onmessage = function(event) {
         case "start_bid":
             phase = "bids";
             showPlayerInfo(payload);
-            startBids(payload.club);
+            startBids(payload);
             startCountDown("bid");
             break;
         // case "new_bid":
