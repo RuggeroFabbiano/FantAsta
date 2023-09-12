@@ -25,8 +25,8 @@
     {% endif %}
 
     {% comment %} AUCTION DASHBOARD {% endcomment %}
-    <div id="auction-dashboard" style="height: calc(100vh - 50px); display: none">
-      <div class="d-flex flex-column">
+    <div id="auction-dashboard" style="display: none">
+      <div class="d-flex flex-column" style="height: calc(100vh - 50px)">
 
         {% comment %} Player selection {% endcomment %}
         <div style="height: 80px; padding: 10px 20px">
@@ -58,20 +58,20 @@
         </div>
 
         {% comment %} Round info {% endcomment %}
-          <div id="bid-info" class="flex-grow-1 d-flex justify-content-around" style="visibility: hidden">
-            <div id="current-bid" style="padding: 1rem 3rem; border-radius: 15px">
-              <p class="text-center" style="font-size: 48pt">
-                <span id="bid-amount"></span>
-                <span class="currency">M</span>
-              </p>
-              <p id="bidder" class="text-center" style="font-size: 14pt"></p>
-            </div>
-            <div class="d-flex">
-              <div id="bid-countdown-container">
-                <p id="bid-countdown" class="text-center" style="font-size: 32pt; margin: auto">3</p>
-              </div>
+        <div id="bid-info" class="flex-grow-1 d-flex justify-content-around" style="visibility: hidden">
+          <div id="current-bid" style="padding: 1rem 3rem; border-radius: 15px">
+            <p class="text-center" style="font-size: 48pt">
+              <span id="bid-amount"></span>
+              <span class="currency">M</span>
+            </p>
+            <p id="bidder" class="text-center" style="font-size: 14pt"></p>
+          </div>
+          <div class="d-flex">
+            <div id="bid-countdown-container">
+              <p id="bid-countdown" class="text-center" style="font-size: 32pt; margin: auto">3</p>
             </div>
           </div>
+        </div>
 
         {% comment %} Bid tools {% endcomment %}
         <div id="auction-chat" style="background-color: fuchsia">
