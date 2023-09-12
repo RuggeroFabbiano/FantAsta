@@ -139,6 +139,14 @@ button[disabled] {
 
 #selection-wait {background-color: darkgrey}
 
+#choice-countdown-container {
+  border: 1pt solid white;
+  height: 25pt;
+  width: 25pt;
+  border-radius: 50%;
+  margin: auto;
+}
+
 #bid-info {
   margin: 3rem;
   padding: 1rem;

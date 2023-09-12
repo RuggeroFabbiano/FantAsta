@@ -160,12 +160,17 @@ function showPlayerInfo(data) {
 }
 
 /**
- * Activate bidding
+ * Start bids
+ * @param {Object} data info on the calling bidder
  */
-// function startBids() {
-//     waitingForCall = false;
-//     $(".bid-button").css("background-color", "DarkMagenta");
-// }
+function startBids(data) {
+    $("#bidder").text(data.club);
+    $("#bid-amount").text("1");
+    $("#current-bid").removeClass();
+    $("#current-bid").addClass(data.label);
+    $(".bid-button").prop("disabled", false);
+    $("#bid-info").css("visibility", "visible");
+}
 
 /**
  * Update bid info with new bid
@@ -269,18 +274,6 @@ function startCountDown(action) {
             }
         }, 1000);
     }
-}
-
-/**
- * Start bids
- * @param {Object} data info on the calling bidder
- */
-function startBids(data) {
-    $("#bidder").text(data.club);
-    $("#bid-amount").text("1");
-    $("#current-bid").removeClass();
-    $("#current-bid").addClass(data.label);
-    $(".bid-button").prop("disabled", false);
 }
 
 // Socket close

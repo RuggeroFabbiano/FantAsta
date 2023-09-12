@@ -40,7 +40,7 @@
               <span style="width: 50px"></span>
               <button id="select-player" onclick="selectPlayer()">OK</button>
             </div>
-            <div class="d-flex">
+            <div id="choice-countdown-container" class="d-flex">
               <p id="choice-countdown" style="margin: auto"></p>
             </div>
           </div>
@@ -52,13 +52,13 @@
               <span id="player-name"></span>
               (<span id="player-role"></span>)
             </p>
-            <p id="player-team" style="margin: auto">Inter</p>
+            <p id="player-team" style="margin: auto"></p>
             <p style="margin: auto"><span id="player-price"></span> <span class="currency">M</span></p>
           </div>
         </div>
 
         {% comment %} Round info {% endcomment %}
-          <div id="bid-info" class="flex-grow-1 d-flex justify-content-around">
+          <div id="bid-info" class="flex-grow-1 d-flex justify-content-around" style="visibility: hidden">
             <div id="current-bid" style="padding: 1rem 3rem; border-radius: 15px">
               <p class="text-center" style="font-size: 48pt">
                 <span id="bid-amount"></span>
