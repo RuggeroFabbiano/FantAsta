@@ -138,3 +138,16 @@ button[disabled] {
 }
 
 #selection-wait {background-color: darkgrey}
+
+#bid-info {
+  margin: 3rem;
+  padding: 1rem;
+}
+
+#bid-countdown-container {
+  border: 1pt solid DarkMagenta;
+  height: 50pt;
+  width: 50pt;
+  border-radius: 50%;
+  margin: auto;
+}

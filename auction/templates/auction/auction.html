@@ -19,13 +19,13 @@
 
     {% comment %} START/STOP BUTTON {% endcomment %}
     {% if request.user.is_superuser %}
-      <div class="text-center" style="background-color: AntiqueWhite; padding: 0.5rem 0">
-        <button id="start-stop" onclick="startStop(this)">Avvia</button>
+      <div class="d-flex text-center" style="background-color: AntiqueWhite; height: 50px">
+        <button id="start-stop" onclick="startStop(this)" style="margin: auto">Avvia</button>
       </div>
     {% endif %}
 
     {% comment %} AUCTION DASHBOARD {% endcomment %}
-    <div id="auction-dashboard" style="display: none; border: 1pt solid black">
+    <div id="auction-dashboard" class="d-flex flex-column" style="height: calc(100vh - 50px); display: none">
 
       {% comment %} Player selection {% endcomment %}
       <div style="height: 80px; padding: 10px 20px">
@@ -39,25 +39,38 @@
             <span style="width: 50px"></span>
             <button id="select-player" onclick="selectPlayer()">OK</button>
           </div>
+          <div class="d-flex">
+            <p id="choice-countdown" style="margin: auto"></p>
+          </div>
         </div>
         {% comment %} Other users {% endcomment %}
-        <div id="selection-wait" class="selection"></div>
+        {% comment %} <div id="selection-wait" class="selection"></div> {% endcomment %}
         {% comment %} Selection result {% endcomment %}
-        <div id="selection-result" class="selection">
-          <p style="margin: auto">Chiamata</p>
-          <p style="margin: auto">Onana</p>
-          <p style="margin: auto">portiere</p>
-          <p style="margin: auto">Inter</p>
-          <p style="margin: auto">40 M</p>
-        </div>
+        {% comment %} <div id="selection-result" class="selection">
+          <p style="margin: auto">
+            <span id="player-name"></span>
+            (<span id="player-role"></span>)
+          </p>
+          <p id="player-team" style="margin: auto">Inter</p>
+          <p style="margin: auto"><span id="player-price"></span> <span class="currency">M</span></p>
+        </div> {% endcomment %}
       </div>
 
       {% comment %} Round info {% endcomment %}
-      <div id="auction-info" style="background-color: aqua">
-        <p>Scelto: {{player}}</p>
-        <p>Rilancio attuale: {{club}} {{rilancio}}</p>
-        <p>TMPO FINITO: {{player}} acquistato da {{club}} per {{value}} <span class="currency">M</span></p>
-      </div>
+        <div id="bid-info" class="flex-grow-1 d-flex justify-content-around">
+          <div id="current-bid" style="padding: 1rem 3rem; border-radius: 15px">
+            <p class="text-center" style="font-size: 48pt">
+              <span id="bid-amount"></span>
+              <span class="currency">M</span>
+            </p>
+            <p id="bidder" class="text-center" style="font-size: 14pt"></p>
+          </div>
+          <div class="d-flex">
+            <div id="bid-countdown-container">
+              <p id="bid-countdown" class="text-center" style="font-size: 32pt; margin: auto">3</p>
+            </div>
+          </div>
+        </div>
 
       {% comment %} Bid tools {% endcomment %}
       <div id="auction-chat" style="background-color: fuchsia">

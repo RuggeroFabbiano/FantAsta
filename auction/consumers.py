@@ -78,10 +78,13 @@ class Consumer(WebsocketConsumer):
         """Select a new player and open bids"""
         self.player = Player.objects.get(id=data['player'])
         payload = {
+            'id': self.player.id,
+            'name': self.player.name,
+            'role': self.player.role,
+            'team': self.player.team,
+            'price': self.player.price,
             'club': self.clubs[self.c],
-            'player_name': self.player.name,
-            'player_team': self.player.team,
-            'player_role': self.player.role
+            'label': F'team{self.c + 1}'
         }
         self.send(text_data=dumps(payload))
 

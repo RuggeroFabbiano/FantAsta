@@ -2,9 +2,8 @@
 const host = window.location.host;
 const protocol = host.startsWith("localhost")? "ws" : "wss";
 const socket = new WebSocket(protocol + "://" + host + "/ws" + "{{request.path}}");
-var phase;
-var callTimeout = 0;
-var bidTimeout = 0;
+
+var phase, callTimeout, bidTimeout;
 
 
 // ACTIONS (SEND MESSAGES)
@@ -26,12 +25,11 @@ function startStop(element) {
 /**
  * Call next player and start bids
  */
-// function selectPlayer() {
-//     clearTimeout(callTimeout);  // stop timer on player selection
-//     const playerID = $("#player-selector").val();
-//     const playerInfo = $( "#player-selector option:selected" ).text();
-//     send({"event": "start_bid", "player": playerID});
-// }
+function selectPlayer() {
+    clearInterval(callTimeout);
+    const playerID = $("#player-selector").val();
+    send({"event": "start_bid", "player": playerID});
+}
 
 /**
  * Make new bid
@@ -53,7 +51,7 @@ socket.onmessage = function(event) {
     switch (payload.event) {
         case "join":
             phase = payload.phase;
-            if (phase === "awaiting participants") {
+            if (phase !== "awaiting participants") { // TEMP
                 setParticipants(payload.participants);
                 if (payload.participants.length === payload.total) {
                     $("#start-stop").prop("disabled", false);
@@ -66,14 +64,16 @@ socket.onmessage = function(event) {
             // not breaking here since we also wanna execute first round when starting
         case "continue":
             phase = "awaiting choice";
+            stopBids();
             setPlayerChoice(payload.club, payload.role);
-            // callTimeout = setTimeout(function() {send({"event": "continue"})}, 1000*15);
+            if ("{{request.user.club}}" === club) {startCountDown("call");}
             break;
-        // case "start_bid":
-        //     showBidInfo(payload);
-        //     startBids();
-        //     bidTimeout = setTimeout(function() {buyPlayer(payload.club, 1);}, 1000*3);
-        //     break;
+        case "start_bid":
+            phase = "bids";
+            showPlayerInfo(payload);
+            startBids(payload.club);
+            startCountDown("bid");
+            break;
         // case "new_bid":
         //     clearTimeout(bidTimeout);
         //     updateBid(payload.club, payload.value);
@@ -131,14 +131,6 @@ function setPlayerChoice(club, role) {
 }
 
 /**
- * Stop bids during player choice
- */
-// function stopBids() {
-//     waitingForCall = true;
-//     $(".bid-button").css("background-color", "lightgrey");
-// }
-
-/**
  * Prepare players list for selection
  * @param {String} club name of the club of the attending user 
  * @param {String} roleIndex letter indicating the role of players for the current round
@@ -157,15 +149,15 @@ function setPlayerSelector(club, roleIndex) {
  * Initialise bid information after player choice
  * @param {Object} data information on selected player and club holding the current round
  */
-// function showBidInfo(data) {
-//     $("#auction-info").append(`<p>Gioatore chiamato: ${data.player_name} (${data.player_team} - ${data.player_role})</p>`);
-//     $("#auction-info").append(`
-//         <p>
-//             Offerta corrente: <span id="best-bid">1</span> <span class="currency">M</span>
-//             (<span id="best-bidder">${data.club}</span>)
-//         </p>
-//     `);
-// }
+function showPlayerInfo(data) {
+    $("#selection-choice").hide();
+    $("#selection-wait").hide();
+    $("#player-name").text(data.name);
+    $("#player-role").text(data.role);
+    $("#player-team").text(data.team);
+    $("#player-price").text(data.price);
+    $("#selection-result").show();
+}
 
 /**
  * Activate bidding
@@ -244,6 +236,51 @@ function getRole(roleIndex) {
         default:
             return null;
     }
+}
+
+/**
+ * Stop bids during player choice
+ */
+function stopBids() {$(".bid-button").prop("disabled", true);}
+
+/**
+ * Start count-down for player choice; skip turn at expiry.
+ * @param {String} action the action to be performed in the given time
+ */
+function startCountDown(action) {
+    if (action === "call") {
+        var timeLeft = 15;
+        $("#choice-countdown").text(timeLeft);
+        callTimeout = setInterval(function() {
+            $("#choice-countdown").text(timeLeft--);
+            if (timeLeft == 0) {
+                clearInterval(callTimeout);
+                send({"event": "continue"});
+            }
+        }, 1000);
+    } else {
+        var timeLeft = 3;
+        $("#bid-countdown").text(timeLeft);
+        bidTimeout = setInterval(function() {
+            $("#bid-countdown").text(timeLeft--);
+            if (timeLeft == 0) {
+                clearInterval(bidTimeout);
+                send({"event": "buy"});
+            }
+        }, 1000);
+    }
+}
+
+/**
+ * Start bids
+ * @param {Object} data info on the calling bidder
+ */
+function startBids(data) {
+    $("#bidder").text(data.club);
+    $("#bid-amount").text("1");
+    $("#current-bid").removeClass();
+    $("#current-bid").addClass(data.label);
+    $(".bid-button").prop("disabled", false);
 }
 
 // Socket close
