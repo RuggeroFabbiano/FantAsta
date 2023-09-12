@@ -144,6 +144,7 @@ button[disabled] {
   height: 25pt;
   width: 25pt;
   border-radius: 50%;
+  margin: auto 0;
 }
 
 #bid-info {
