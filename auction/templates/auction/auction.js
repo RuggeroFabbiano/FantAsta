@@ -59,6 +59,11 @@ function customBid(value) {
     if (!isNaN(value) && value > currentBid && money-value >= missing-1) {makeBid(value);}
 }
 
+/**
+ * Assign player to club manually
+ */
+function assign() {send({"event": "assign"});}
+
 
 // REACTIONS (RECEIVE MESSAGES)
 
@@ -82,6 +87,7 @@ socket.onmessage = function(event) {
         case "continue":
             phase = "awaiting choice";
             stopBids();
+            if ("{{request.user.club}}" === payload.buyer) {addPlayer(payload);}
             setPlayerChoice(payload.club, payload.role);
             if ("{{request.user.club}}" === payload.club) {startCountDown("call");}
             break;
@@ -133,6 +139,14 @@ function showAuctionDashboard() {
             $(row).removeClass("empty");
         }
     });
+}
+
+/**
+ * Stop bids during player choice
+ */
+function stopBids() {
+    $(".bid-button").prop("disabled", true);
+    $("#assign").prop("disabled", true);
 }
 
 /**
@@ -194,6 +208,7 @@ function showPlayerInfo(data) {
 function startBids(data) {
     $(".bid-button").prop("disabled", false);
     $("#bid-info").css("visibility", "visible");
+    $("#assign").prop("disabled", false);
 }
 
 /**
@@ -217,22 +232,6 @@ function updateBid(data) {
     if (money - (amount*2) < needed) {$("bid-2").prop("disabled", true);}
     else {$("bid-2").prop("disabled", false);}
 }
-
-/**
- * Buy current player and continue
- * @param {String} club name of the club buying the player
- * @param {Number} value purchase price
- */
-// function buyPlayer(club, value) {
-//     waitingForCall = true;
-//     const bid = $("#best-bid").text(value);
-//     const bidder = $("#best-bidder").text(club);
-//     $("#auction-info").html(`
-//         <h1>${data.player_name} comprato da ${bidder} per ${bid} <span class="currency">M</span>!</h1>
-//         <p>In attesa della prossima chiamata...</p>
-//     `);
-//     send({"event": "buy", "club": club, "value": value});
-// }
 
 /**
  * Stop auction
@@ -280,11 +279,6 @@ function getRole(roleIndex) {
 }
 
 /**
- * Stop bids during player choice
- */
-function stopBids() {$(".bid-button").prop("disabled", true);}
-
-/**
  * Start count-down for player choice; skip turn at expiry.
  * @param {String} action the action to be performed in the given time
  */
@@ -306,7 +300,7 @@ function startCountDown(action) {
             $("#bid-countdown").text(timeLeft--);
             if (timeLeft == 0) {
                 clearInterval(bidTimeout);
-                send({"event": "buy"});
+                send({"event": "assign"});
             }
         }, 1000);
     }
@@ -314,7 +308,7 @@ function startCountDown(action) {
 
 /**
  * Send bid message
- * @param {amount} the bid amount
+ * @param {Number} amount the bid amount
  */
 function makeBid(amount) {
     send({
@@ -326,16 +320,26 @@ function makeBid(amount) {
 
 }
 
+/**
+ * Add player to buyer's roster
+ * @param {Object} data the club and player data
+ */
+function addPlayer(data) {
+    var row = $(`#${data.player.role}`).children(".empty").first();
+    $(row).html(`
+        <td>${data.player.name}</td>
+        <td>${data.player.team}</td>
+        <td>${data.player.price}</td>
+    `);
+    $(row).removeClass("empty");
+    $("#current-money").text(data.money);
+}
+
 // Socket close
 socket.onclose = function(e) {console.error("Web socket closed unexpectedly");}
 
 
 
 
-
-// INFO PERSONALI
-//   quanti soldi hai
-
 // CONTROLLI
 //   uno non può più rilanciare né chiamare se è pieno per quel ruolo
-//   uno non può più rilanciare più di soldi rimasti - 1 * giocatori mancanti

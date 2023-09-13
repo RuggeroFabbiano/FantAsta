@@ -41,15 +41,17 @@ class Consumer(WebsocketConsumer):
         elif event == 'start_bid':
             data = payload
             data['type'] = 'start.bid'
-        # New bid received / auction stop
-        if event in ['new_bid', 'stop_auction']:
+        # New bid received
+        if event == 'new_bid':
+            data = payload
+            data['type'] = 'update.bid'
+        # Assign player
+        elif event == 'assign':
+            data = {'event': 'continue', 'type': 'buy'}
+        # Auction stop
+        if event == 'stop_auction':
             data = payload
             data['type'] = 'broadcast'
-        # Assign player
-        elif event == 'buy':
-            self._buy_player(payload)
-            self._set_next_turn()
-            data = {'event': 'continue', 'type': 'set.next.round'}
         # Dispatch
         group_send(self.group, data)
 
@@ -65,13 +67,8 @@ class Consumer(WebsocketConsumer):
 
     def set_next_round(self, data: dict) -> None:
         """Launch next round"""
-        self._set_next_round()
-        self.phase = "awaiting choice"
-        payload = {
-            'event': data['event'],
-            'club': self.clubs[self.c],
-            'role': self.roles[self.r]
-        }
+        payload = self._set_next_round()
+        payload['event'] = data['event']
         self.send(text_data=dumps(payload))
 
     def start_bid(self, data: dict) -> None:
@@ -89,12 +86,29 @@ class Consumer(WebsocketConsumer):
         }
         self.send(text_data=dumps(payload))
 
-    def broadcast(self, data: dict) -> None:
-        """Broadcast message as-is"""
+    def update_bid(self, data: dict) -> None:
+        """Update auction with last bid"""
+        self.player.price = data['amount']
+        self.player.club = Club.objects.get(name=data['club'])
         self.send(text_data=dumps(data))
 
     def buy(self, data: dict) -> None:
-        """Assign player of current bid"""
+        """Assign player of current bid and continue"""
+        self.player.save()
+        payload = self._set_next_round()
+        payload['event'] = 'continue'
+        payload['buyer'] = self.player.club.name
+        payload['player'] = {
+            'name': self.player.name,
+            'team': self.player.team,
+            'role': self.player.role,
+            'price': self.player.price
+        }
+        payload['money'] = self.player.club.money
+        self.send(text_data=dumps(data))
+
+    def broadcast(self, data: dict) -> None:
+        """Broadcast message as-is"""
         self.send(text_data=dumps(data))
 
     def disconnect(self, code):
@@ -105,8 +119,9 @@ class Consumer(WebsocketConsumer):
         group_discard = async_to_sync(self.channel_layer.group_discard)
         group_discard(self.group, self.channel_name)
 
-    def _set_next_round(self) -> None:
+    def _set_next_round(self) -> dict:
         """Set caller club and to-call role for next turn"""
+        self.phase = "awaiting choice"
         if self.c is None:  # first auction turn: init.
             clubs = Club.objects
             club = clubs.filter(next_call__isnull=False) or clubs.first()
@@ -116,14 +131,7 @@ class Consumer(WebsocketConsumer):
             self.r = (self.r + 1) % 4
             if self.r == 0:
                 self.c = (self.c + 1) % len(self.clubs)
-
-    def _buy_player(self, data: dict) -> None:
-        """Buy player of current bid"""
-        club = Club.objects.get(name=data['club'])
-        club.money -= data['value']
-        club.save()
-        self.player.club = club
-        self.player.save()
+        return {'club': self.clubs[self.c], 'role': self.roles[self.r]}
 
 
 class ChatConsumer(WebsocketConsumer):
