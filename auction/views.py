@@ -25,7 +25,7 @@ class Room(LoginRequiredMixin, TemplateView):
 
 
 class PlayerList(View):
-    """On AJAX requests, send list of player for current round"""
+    """On AJAX requests, send list of players for current round"""
 
     def get(self, request, *args, **kwargs):
         """GET request"""
@@ -33,6 +33,22 @@ class PlayerList(View):
         data = [
             {
                 'id': p.id,
+                'name': p.name,
+                'team': p.team,
+                'price': p.price
+            } for p in players
+        ]
+        return JsonResponse(data, safe=False)
+
+
+class ClubPlayerList(View):
+    """On AJAX requests, send list of players of given club"""
+
+    def get(self, request, *args, **kwargs):
+        """GET request"""
+        players = Player.objects.filter(club=request.user.club)
+        data = [
+            {
                 'name': p.name,
                 'team': p.team,
                 'price': p.price

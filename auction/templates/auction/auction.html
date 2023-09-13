@@ -33,7 +33,7 @@
         {% comment %} Player selection {% endcomment %}
         <div style="height: 80px; padding: 10px 20px">
           {% comment %} User of current round {% endcomment %}
-          <div id="selection-choice" class="selection">
+          <div id="selection-choice" class="banner">
             <div class="d-flex">
               <p style="margin: auto">È il tuo turno!</p>
             </div>
@@ -47,9 +47,9 @@
             </div>
           </div>
           {% comment %} Other users {% endcomment %}
-          <div id="selection-wait" class="selection"></div>
+          <div id="selection-wait" class="banner"></div>
           {% comment %} Selection result {% endcomment %}
-          <div id="selection-result" class="selection">
+          <div id="selection-result" class="banner">
             <p style="margin: auto">
               <span id="player-name"></span>
               (<span id="player-role"></span>)
@@ -59,31 +59,217 @@
           </div>
         </div>
 
-        {% comment %} Round info {% endcomment %}
-        <div id="bid-info" class="flex-grow-1 d-flex justify-content-around" style="visibility: hidden">
-          <div id="current-bid">
-            <p class="text-center" style="font-size: 48pt">
-              <span id="bid-amount"></span>
-              <span class="currency">M</span>
-            </p>
-            <p id="bidder" class="text-center" style="font-size: 14pt">ccx</p>
-          </div>
-          <div class="d-flex">
-            <div id="bid-countdown-container">
-              <p id="bid-countdown" class="text-center" style="font-size: 32pt; margin: auto">3</p>
+        {% comment %} Main page {% endcomment %}
+        <div id="bid-info" class="flex-grow-1 d-flex justify-content-between" style="visibility: hidden">
+          {% comment %} Round info {% endcomment %}
+          <div class="d-flex justify-content-around" style="width: 75%">
+            <div id="current-bid">
+              <p class="text-center" style="font-size: 48pt">
+                <span id="best-bid"></span>
+                <span class="currency">M</span>
+              </p>
+              <p id="bidder" class="text-center" style="font-size: 14pt"></p>
+            </div>
+            <div class="d-flex">
+              <div id="bid-countdown-container">
+                <p id="bid-countdown" class="text-center" style="font-size: 32pt; margin: auto">3</p>
+              </div>
+            </div>
+            {% comment %} Bid tools {% endcomment %}
+            <div id="bid-banner" class="d-flex flex-column justify-content-evenly align-items-center" style="padding: 1rem">
+              <div>
+                <button id="bid-1" type="button" class="bid-button" onclick="raiseBid(1)">
+                  + 1 <span class="currency">M</span>
+                </button>
+              </div>
+              <div>
+                <button id="bid-5" type="button" class="bid-button" onclick="raiseBid(5)">
+                  + 5 <span class="currency">M</span>
+                </button>
+              </div>
+              <div>
+                <button id="bid-10" type="button" class="bid-button" onclick="raiseBid(10)">
+                  + 10 <span class="currency">M</span>
+                </button>
+              </div>
+              <div>
+                <button id="bid-2" type="button" class="bid-button" onclick="doubleBid()">× 2</button>
+              </div>
+              <div>
+                <input id="custom-bid" type="number" class="form-control" placeholder="inserisci rilancio"/>
+                <button id="bid-x" type="button" class="bid-button" style="width: 100%" onclick="customBid(parseInt($('#custom-bid').val()))">
+                  Rilancio personalizzato
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-
-        {% comment %} Bid tools {% endcomment %}
-        <div id="auction-chat" style="background-color: fuchsia">
-          <button id="raise-1" type="button" class="bid-button" onclick="raiseBid(1)">+1</button>
-          <button id="raise-5" type="button" class="bid-button" onclick="raiseBid(5)">+5</button>
-          <button id="raise-10" type="button" class="bid-button" onclick="raiseBid(10)">+10</button>
-          <input id="raise-custom" type="number" placeholder="inserisci rilancio"/>
-          <button id="bid" type="button" class="bid-button" onclick="raiseBid(parseInt($('#raise-custom').val()))">
-            Rilancia
-          </button>
+          {% comment %} Roster {% endcomment %}
+          <div id="roster" style="height: calc(100vh - 140px - 2rem)">
+            <div id="roster-title" class="d-flex justify-content-between {{user.club.label}}">
+              <h3>{{user.club}}</h3>
+              <h3 style="margin-left: 100px">
+                <span id="current-money">{{request.user.club.money}}</span>
+                <span class="currency">M</span>
+              </h3>
+            </div>
+            <div style="height: calc(100% - 80px); overflow: auto">
+              <table style="width: 100%">
+                <thead>
+                  <tr>
+                    <th colspan="3">Portieri</th>
+                  </tr>
+                </thead>
+                <tbody id="P">
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                </tbody>
+                <thead>
+                  <tr>
+                    <th colspan="3">Difensori</th>
+                  </tr>
+                </thead>
+                <tbody id="D">
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                </tbody>
+                <thead>
+                  <tr>
+                    <th colspan="3">Centrocampisti</th>
+                  </tr>
+                </thead>
+                <tbody id="C">
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                </tbody>
+                <thead>
+                  <tr>
+                    <th colspan="3">Attaccanti</th>
+                  </tr>
+                </thead>
+                <tbody id="A">
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                  <tr class="empty">
+                    <td>‎</td>
+                    <td>‎ </td>
+                    <td>‎ </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
 
       </div>

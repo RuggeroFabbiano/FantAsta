@@ -33,15 +33,32 @@ function selectPlayer() {
 }
 
 /**
- * Make new bid
- * @param {Number} value the bid value 
+ * Raise bid by fixed value
+ * @param {Number} value the bid raise value
  */
-// function raiseBid(value) {
-//     const currentBid = parseInt($("#best-bid").text());
-//     if (!waitingForCall && !isNaN(value) && value > currentBid) {
-//         send({"event": "new_bid", "club": "{{request.user.club}}", "value": value});
-//     }
-// }
+function raiseBid(value) {
+    const currentBid = parseInt($("#best-bid").text());
+    makeBid(currentBid + value);
+}
+
+/**
+ * Double current bid
+ */
+function doubleBid() {
+    const currentBid = parseInt($("#best-bid").text());
+    makeBid(currentBid*2);
+}
+
+/**
+ * Make new bid of custom value
+ * @param {Number} value the bid value
+ */
+function customBid(value) {
+    const currentBid = parseInt($("#best-bid").text());
+    const money = parseInt($("#current-money").text());
+    const missing = $(".empty").length;
+    if (!isNaN(value) && value > currentBid && money-value >= missing-1) {makeBid(value);}
+}
 
 
 // REACTIONS (RECEIVE MESSAGES)
@@ -52,7 +69,7 @@ socket.onmessage = function(event) {
     switch (payload.event) {
         case "join":
             phase = payload.phase;
-            if (phase === "awaiting participants") { // TEMP
+            if (phase !== "awaiting participants") { // TEMP
                 setParticipants(payload.participants);
                 if (payload.participants.length === payload.total) {
                     $("#start-stop").prop("disabled", false);
@@ -73,12 +90,12 @@ socket.onmessage = function(event) {
             phase = "bids";
             showPlayerInfo(payload);
             startBids(payload);
+            // not breaking here since we also wanna execute first round when starting
+        case "new_bid":
+            clearInterval(bidTimeout);
+            updateBid(payload);
             startCountDown("bid");
             break;
-        // case "new_bid":
-        //     clearTimeout(bidTimeout);
-        //     updateBid(payload.club, payload.value);
-        //     bidTimeout = setTimeout(function() {buyPlayer(payload.club, payload.value);}, 1000*3);
         // case "stop_auction":
         //     stopAuction();
         //     break;
@@ -106,6 +123,17 @@ function showAuctionDashboard() {
     $("#page-container").css("background-color", "white");
     $("#participants").hide();
     $("#auction-dashboard").show();
+    $.get("{% url 'players-club' %}").done(function(data) {
+        for (let player of data) {
+            var row = $(`#${player.role}`).children(".empty").first();
+            $(row).html(`
+                <td>${player.name}</td>
+                <td>${player.team}</td>
+                <td>${player.price}</td>
+            `);
+            $(row).removeClass("empty");
+        }
+    });
 }
 
 /**
@@ -165,23 +193,31 @@ function showPlayerInfo(data) {
  * @param {Object} data info on the calling bidder
  */
 function startBids(data) {
-    $("#bidder").text(data.club);
-    $("#bid-amount").text("1");
-    $("#current-bid").removeClass();
-    $("#current-bid").addClass(data.label);
     $(".bid-button").prop("disabled", false);
     $("#bid-info").css("visibility", "visible");
 }
 
 /**
  * Update bid info with new bid
- * @param {String} club name of the club making the bid 
- * @param {Number} value amount of the bid
+ * @param {Object} data new bid
  */
-// function updateBid(club, value) {
-//     $("#best-bid").text(value);
-//     $("#best-bidder").text(club);
-// }
+function updateBid(data) {
+    const amount = data.amount || 1;
+    $("#bidder").text(data.club);
+    $("#best-bid").text(amount);
+    $("#current-bid").removeClass();
+    $("#current-bid").addClass(data.label);
+    const money = parseInt($("#current-money").text());
+    const needed = $(".empty").length - 1;
+    if (money - (amount+10) < needed) {$("bid-10").prop("disabled", true);}
+    else {$("bid-10").prop("disabled", false);}
+    if (money - (amount+5) < needed) {$("bid-5").prop("disabled", true);}
+    else {$("bid-5").prop("disabled", false);}
+    if (money - (amount+1) < needed) {$("bid-1").prop("disabled", true);}
+    else {$("bid-1").prop("disabled", false);}
+    if (money - (amount*2) < needed) {$("bid-2").prop("disabled", true);}
+    else {$("bid-2").prop("disabled", false);}
+}
 
 /**
  * Buy current player and continue
@@ -265,7 +301,7 @@ function startCountDown(action) {
             }
         }, 1000);
     } else {
-        var timeLeft = 3;
+        var timeLeft = 5;
         $("#bid-countdown").text(timeLeft);
         bidTimeout = setInterval(function() {
             $("#bid-countdown").text(timeLeft--);
@@ -275,6 +311,20 @@ function startCountDown(action) {
             }
         }, 1000);
     }
+}
+
+/**
+ * Send bid message
+ * @param {amount} the bid amount
+ */
+function makeBid(amount) {
+    send({
+        "event": "new_bid",
+        "club": "{{user.club}}",
+        "label": "{{user.club.label}}",
+        "amount": amount
+    });
+
 }
 
 // Socket close

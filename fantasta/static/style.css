@@ -94,7 +94,6 @@ label {margin-top: 1rem}
   padding: 1rem;
   overflow: auto;
   background: radial-gradient(circle, AntiqueWhite 0%, white 100%);
-
 }
 
 .currency {text-decoration-line: line-through}
@@ -125,7 +124,7 @@ button[disabled] {
   color: grey;
 }
 
-.selection {
+.banner {
   display: flex;
   justify-content: space-around;
   border-radius: 10px;
@@ -147,10 +146,7 @@ button[disabled] {
   margin: auto 0;
 }
 
-#bid-info {
-  margin: 3rem;
-  padding: 1rem;
-}
+#bid-info {margin: 20px}
 
 #current-bid {
   height: 200px;
@@ -165,4 +161,42 @@ button[disabled] {
   width: 50pt;
   border-radius: 50%;
   margin: auto;
+}
+
+#roster {
+  background-color: AntiqueWhite;
+  border-radius: 10px;
+  padding-bottom: 0.5rem;
+}
+
+#roster-title {
+  padding: 1rem 1.5rem 0.5rem;
+  border-radius: 10px 10px 0 0;
+}
+
+h3 {font-size: 16pt}
+
+tr th {
+  background-color: #F1C68E;
+  text-align: center;
+}
+
+th, td {padding: 0 1rem}
+
+tr+tr {border-top: 1pt solid #F1C68E}
+
+#bid-banner {
+  border: 1pt solid darkgrey;
+  border-radius: 10px;
+  box-shadow: 0 3px 5px 1px darkgrey;
+}
+
+.bid-button {
+  width: 50%;
+  margin: 0 auto 2rem;
+}
+
+.bid-button:hover {
+  background-color: DarkMagenta;
+  color: white;
 }
