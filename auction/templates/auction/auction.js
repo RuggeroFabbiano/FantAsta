@@ -85,6 +85,7 @@ socket.onmessage = function(event) {
             showAuctionDashboard();
             // not breaking here since we also wanna execute first round when starting
         case "continue":
+            console.log(payload);
             phase = "awaiting choice";
             stopBids();
             if ("{{request.user.club}}" === payload.buyer) {addPlayer(payload);}
