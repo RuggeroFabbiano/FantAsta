@@ -201,3 +201,8 @@ tr+tr {border-top: 1pt solid #F1C68E}
   background-color: DarkMagenta;
   color: white;
 }
+
+.bid-button[disabled]:hover {
+  background-color: lightgrey;
+  color: grey;
+}

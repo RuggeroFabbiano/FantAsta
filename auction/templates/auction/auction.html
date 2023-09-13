@@ -21,7 +21,7 @@
     {% if user.is_superuser %}
       <div class="d-flex text-center" style="background-color: AntiqueWhite; height: 50px">
         <button id="start-stop" onclick="startStop(this)" style="margin: auto">Avvia</button>
-        <button id="assign" onclick="assign()" style="margin: auto">Assegna giocatore</button>
+        <button id="assign" onclick="assign()" style="margin: auto" disabled=true>Assegna giocatore</button>
       </div>
     {% endif %}
 

@@ -108,7 +108,7 @@ class Consumer(WebsocketConsumer):
             'price': self.player.price
         }
         payload['money'] = self.player.club.money
-        self.send(text_data=dumps(data))
+        self.send(text_data=dumps(payload))
 
     def broadcast(self, data: dict) -> None:
         """Broadcast message as-is"""
