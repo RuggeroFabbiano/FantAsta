@@ -18,7 +18,7 @@
     </div>
 
     {% comment %} START/STOP BUTTON {% endcomment %}
-    {% if request.user.is_superuser %}
+    {% if user.is_superuser %}
       <div class="d-flex text-center" style="background-color: AntiqueWhite; height: 50px">
         <button id="start-stop" onclick="startStop(this)" style="margin: auto">Avvia</button>
       </div>
@@ -27,7 +27,7 @@
     {% comment %} AUCTION DASHBOARD {% endcomment %}
     <div id="auction-dashboard" style="display: none">
       <div class="d-flex flex-column"
-        style="height: {% if request.user.is_superuser%}calc(100vh - 50px){% else %}100vh{% endif %}"
+        style="height: {% if user.is_superuser %}calc(100vh - 50px){% else %}100vh{% endif %}"
       >
 
         {% comment %} Player selection {% endcomment %}
