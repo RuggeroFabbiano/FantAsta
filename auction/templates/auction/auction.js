@@ -290,7 +290,7 @@ function stopBids() {$(".bid-button").prop("disabled", true);}
  */
 function startCountDown(action) {
     if (action === "call") {
-        var timeLeft = 15;
+        var timeLeft = 20;
         $("#choice-countdown").text(timeLeft);
         callTimeout = setInterval(function() {
             $("#choice-countdown").text(timeLeft--);
@@ -300,7 +300,7 @@ function startCountDown(action) {
             }
         }, 1000);
     } else {
-        var timeLeft = 5;
+        var timeLeft = 10;
         $("#bid-countdown").text(timeLeft);
         bidTimeout = setInterval(function() {
             $("#bid-countdown").text(timeLeft--);
