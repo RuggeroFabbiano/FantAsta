@@ -135,6 +135,7 @@ button[disabled] {
   background-color: DarkMagenta;
   color: white;
 }
+#selection-result {font-size: 20pt}
 
 #selection-wait {background-color: darkgrey}
 
