@@ -62,7 +62,10 @@ function customBid(value) {
 /**
  * Assign player to club manually
  */
-function assign() {send({"event": "assign"});}
+function assign() {
+    clearInterval(bidTimeout);
+    send({"event": "assign"});
+}
 
 
 // REACTIONS (RECEIVE MESSAGES)
@@ -302,10 +305,7 @@ function startCountDown(action) {
         $("#bid-countdown").text(timeLeft);
         bidTimeout = setInterval(function() {
             $("#bid-countdown").text(timeLeft--);
-            if (timeLeft == 0) {
-                clearInterval(bidTimeout);
-                send({"event": "assign"});
-            }
+            if (timeLeft == 0) {assign();}
         }, 1000);
     }
 }
