@@ -149,6 +149,7 @@ function showAuctionDashboard() {
 function stopBids() {
     clearInterval(bidTimeout);
     $(".bid-button").prop("disabled", true);
+    $("#bid-countdown-container").hide();
     $("#assign").prop("disabled", true);
 }
 
@@ -210,8 +211,11 @@ function showPlayerInfo(data) {
  */
 function startBids(data) {
     $(".bid-button").prop("disabled", false);
-    $("#bid-info").css("visibility", "visible");
+    $("#bid-countdown-container").show();
     $("#assign").prop("disabled", false);
+    if ($("#bid-info").css("visibility") === "hidden") {
+        $("#bid-info").css("visibility", "visible");
+    }
 }
 
 /**

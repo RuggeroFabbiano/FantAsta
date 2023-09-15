@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db.models import (CASCADE, SET_NULL, CharField, ForeignKey, Model,
-                              OneToOneField, PositiveIntegerField, Sum)
+                              OneToOneField, PositiveIntegerField, QuerySet,
+                              Sum)
 
 
 ROLES = [
@@ -37,6 +38,26 @@ class Club(Model):
         alphabetical order
         """
         return F"team{Club.objects.filter(name__lte=self.name).count()}"
+
+    @property
+    def guardians(self) -> QuerySet:
+        """Get club guardians"""
+        self.players.filter(role='P')
+
+    @property
+    def defenders(self) -> QuerySet:
+        """Get club defenders"""
+        self.players.filter(role='D')
+
+    @property
+    def midfielders(self) -> QuerySet:
+        """Get club midfielders"""
+        self.players.filter(role='C')
+
+    @property
+    def strikers(self) -> QuerySet:
+        """Get club strikers"""
+        self.players.filter(role='A')
 
 
 class Player(Model):

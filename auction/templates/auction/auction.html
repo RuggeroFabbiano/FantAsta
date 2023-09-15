@@ -121,11 +121,14 @@
                   </tr>
                 </thead>
                 <tbody id="P">
-                  <tr class="empty">
-                    <td>‎</td>
-                    <td>‎ </td>
-                    <td>‎ </td>
-                  </tr>
+                  {% for player in user.club.guardians %}
+                    <tr class="empty">
+                      <td>player.name</td>
+                      <td>player.team </td>
+                      <td>player.price </td>
+                    </tr>
+                  {% endfor %}
+                  {{8|add:-user.club.guardians.count}}
                   <tr class="empty">
                     <td>‎</td>
                     <td>‎ </td>
