@@ -97,7 +97,10 @@ class Consumer(WebsocketConsumer):
 
     def buy(self, data: dict) -> None:
         """Assign player of current bid and continue"""
+        print("SALVO GIOCATORE")
         self.player.save()
+        print("GIOCATORE SALVATO")
+        print("GIOCATORE COMPRATO DA ", self.player.club)
         payload = self._set_next_round()
         payload['event'] = 'continue'
         payload['buyer'] = self.player.club.name

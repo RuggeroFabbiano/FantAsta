@@ -40,8 +40,8 @@ class Club(Model):
         return F"team{Club.objects.filter(name__lte=self.name).count()}"
 
     @property
-    def guardians(self) -> QuerySet:
-        """Get club guardians"""
+    def goalkeepers(self) -> QuerySet:
+        """Get club goalkeepers"""
         self.players.filter(role='P')
 
     @property
