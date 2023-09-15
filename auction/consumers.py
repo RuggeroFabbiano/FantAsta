@@ -134,6 +134,9 @@ class Consumer(WebsocketConsumer):
             self.r = (self.r + 1) % 4
             if self.r == 0:
                 self.c = (self.c + 1) % len(self.clubs)
+                club = Club.objects.get(name=self.clubs[self.c])
+                while club.user.username not in self.participants:
+                    self.c = (self.c + 1) % len(self.clubs)
         return {'club': self.clubs[self.c], 'role': self.roles[self.r]}
 
 
