@@ -131,8 +131,11 @@ function showAuctionDashboard() {
     $("#participants").hide();
     $("#auction-dashboard").show();
     $.get("{% url 'players-club' %}").done(function(data) {
+        console.log("Get player done");
         for (let player of data) {
+            console.log(player);
             var row = $(`#${player.role}`).children(".empty").first();
+            console.log(row);
             $(row).html(`
                 <td>${player.name}</td>
                 <td>${player.team}</td>
