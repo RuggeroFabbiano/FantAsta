@@ -147,6 +147,7 @@ function showAuctionDashboard() {
  * Stop bids during player choice
  */
 function stopBids() {
+    clearInterval(bidTimeout);
     $(".bid-button").prop("disabled", true);
     $("#assign").prop("disabled", true);
 }
