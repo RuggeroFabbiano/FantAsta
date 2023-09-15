@@ -39,26 +39,6 @@ class Club(Model):
         """
         return F"team{Club.objects.filter(name__lte=self.name).count()}"
 
-    @property
-    def goalkeepers(self) -> QuerySet:
-        """Get club goalkeepers"""
-        self.players.filter(role='P')
-
-    @property
-    def defenders(self) -> QuerySet:
-        """Get club defenders"""
-        self.players.filter(role='D')
-
-    @property
-    def midfielders(self) -> QuerySet:
-        """Get club midfielders"""
-        self.players.filter(role='C')
-
-    @property
-    def strikers(self) -> QuerySet:
-        """Get club strikers"""
-        self.players.filter(role='A')
-
 
 class Player(Model):
     """Serie A football players"""

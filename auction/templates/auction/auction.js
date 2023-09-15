@@ -199,7 +199,7 @@ function showPlayerInfo(data) {
     $("#selection-choice").hide();
     $("#selection-wait").hide();
     $("#player-name").text(data.name);
-    $("#player-role").text(data.role);
+    $("#player-role").text(getRoleIcon(data.role));
     $("#player-team").text(data.team);
     $("#player-price").text(data.price);
     $("#selection-result").show();
@@ -213,6 +213,11 @@ function startBids(data) {
     $(".bid-button").prop("disabled", false);
     $("#bid-countdown-container").show();
     $("#assign").prop("disabled", false);
+    $("bid-player-info").html(`
+        <div>${data.name}</div>
+        <div style="margin: 0 3rem">${getRoleIcon(data.role)}</div>
+        <div>${data.team}</div>
+    `);
     if ($("#bid-info").css("visibility") === "hidden") {
         $("#bid-info").css("visibility", "visible");
     }
@@ -312,6 +317,25 @@ function startCountDown(action) {
                 if ("{{user.is_superuser}}" === "True") {assign();}
             }
         }, 1000);
+    }
+}
+
+/**
+ * Return rounded letter corresponding to player role
+ * @param {Object} roleIndex the role letter
+ */
+function getRoleIcon(roleIndex) {
+    switch (roleIndex) {
+        case "P":
+            return "Ⓟ";
+        case "D":
+            return "Ⓓ";
+        case "C":
+            return "Ⓒ";
+        case "A":
+            return "Ⓐ";
+        default:
+            return null;
     }
 }
 
