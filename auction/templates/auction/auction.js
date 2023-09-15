@@ -62,10 +62,7 @@ function customBid(value) {
 /**
  * Assign player to club manually
  */
-function assign() {
-    clearInterval(bidTimeout);
-    send({"event": "assign"});
-}
+function assign() {send({"event": "assign"});}
 
 
 // REACTIONS (RECEIVE MESSAGES)
@@ -92,9 +89,9 @@ socket.onmessage = function(event) {
         case "continue":
             phase = "awaiting choice";
             stopBids();
-            if ("{{request.user.club}}" === payload.buyer) {addPlayer(payload);}
+            if ("{{user.club}}" === payload.buyer) {addPlayer(payload);}
             setPlayerChoice(payload.club, payload.role);
-            if ("{{request.user.club}}" === payload.club) {startCountDown("call");}
+            if ("{{user.club}}" === payload.club) {startCountDown("call");}
             break;
         case "start_bid":
             phase = "bids";
@@ -162,7 +159,7 @@ function stopBids() {
 function setPlayerChoice(club, role) {
     $("#selection-result").hide();
     const fullRole = getRole(role);
-    if ("{{request.user.club}}" === club) {
+    if ("{{user.club}}" === club) {
         $("#player-selector").html(`<option value="">Scegli un ${fullRole}</option>`);
         setPlayerSelector(club, role);
         $("#selection-choice").show();
@@ -305,7 +302,10 @@ function startCountDown(action) {
         $("#bid-countdown").text(timeLeft);
         bidTimeout = setInterval(function() {
             $("#bid-countdown").text(timeLeft--);
-            if (timeLeft == 0) {assign();}
+            if (timeLeft == 0) {
+                clearInterval(bidTimeout);
+                if ("{{user.is_superuser}}" === "True") {assign();}
+            }
         }, 1000);
     }
 }
