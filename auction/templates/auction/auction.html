@@ -11,7 +11,7 @@
     <div id="participants">
       {% for club in clubs %}
         <p class="{{club}}" style="margin: 0; display: none">
-          <span class="{{club.label}}-inv">{{club.user.first_name}} ({{club}})</span>
+          <span class="{{club.label}}-inv">{{club.user}} ({{club}})</span>
           è pronto per l'asta...
         </p>
       {% endfor %}
