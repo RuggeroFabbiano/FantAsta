@@ -28,7 +28,7 @@ function startStop(element) {
 function selectPlayer() {
     clearInterval(callTimeout);
     const playerID = $("#player-selector").val();
-    send({"event": "start_bid", "player": playerID});
+    if (playerID) {send({"event": "start_bid", "player": playerID});}
 }
 
 /**
