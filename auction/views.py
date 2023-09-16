@@ -50,6 +50,7 @@ class ClubPlayerList(View):
         data = [
             {
                 'name': p.name,
+                'role': p.role,
                 'team': p.team,
                 'price': p.price
             } for p in players
