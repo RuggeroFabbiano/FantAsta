@@ -1,0 +1,25 @@
+{% extends "admin/base_site.html" %}
+
+{% load static %}
+
+{% block title %}Resetta rose{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content_title %}
+  <h1>Resetta rose</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="POST">
+    {% csrf_token %}
+    <button type="submit"
+      style="
+        background-color: DarkMagenta; color: white; border-radius: 10px;
+        border: none; padding: 1rem; cursor: pointer
+      "
+    >
+      Conferma
+    </button>
+  </form>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "admin/base_site.html" %}
+
+{% load static %}
+
+{% block title %}{{object.name}}{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content_title %}
+  <h1>{{object.name}}</h1>
+{% endblock %}
+
+{% block content %}
+  <table>
+    <thead>
+      <tr>
+        <th colspan="3">Portieri</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for player in object.players.all %}
+        {% if player.role == 'P' %}
+          <tr class="empty">
+            <td>{{player.name}}</td>
+            <td>{{player.team}}</td>
+            <td align="right">{{player.price}}</td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </tbody>
+    <thead>
+      <tr>
+        <th colspan="3">Difensori</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for player in object.players.all %}
+        {% if player.role == 'D' %}
+          <tr class="empty">
+            <td>{{player.name}}</td>
+            <td>{{player.team}}</td>
+            <td align="right">{{player.price}}</td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </tbody>
+    <thead>
+      <tr>
+        <th colspan="3">Centrocampisti</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for player in object.players.all %}
+        {% if player.role == 'C' %}
+          <tr class="empty">
+            <td>{{player.name}}</td>
+            <td>{{player.team}}</td>
+            <td align="right">{{player.price}}</td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </tbody>
+    <thead>
+      <tr>
+        <th colspan="3">Attaccanti</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for player in object.players.all %}
+        {% if player.role == 'A' %}
+          <tr class="empty">
+            <td>{{player.name}}</td>
+            <td>{{player.team}}</td>
+            <td align="right">{{player.price}}</td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
