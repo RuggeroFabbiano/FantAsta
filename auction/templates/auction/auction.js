@@ -221,9 +221,6 @@ function startBids(data) {
         <div style="margin: 0 3rem">${getRoleIcon(data.role)}</div>
         <div>${data.team}</div>
     `);
-    if ($("#bid-info").css("visibility") === "hidden") {
-        $("#bid-info").css("visibility", "visible");
-    }
 }
 
 /**
