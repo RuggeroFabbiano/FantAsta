@@ -42,4 +42,5 @@ class ClearRosters(View):
     def post(self, request, *args, **kwargs):
         """Clear rosters"""
         Player.objects.update(club=None)
+        Club.objects.update(next_call=None)
         return redirect('home')

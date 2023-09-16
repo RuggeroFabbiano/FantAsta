@@ -72,10 +72,11 @@ class Consumer(WebsocketConsumer):
 
     def start_bid(self, data: dict) -> None:
         """Select a new player and open bids"""
-        club = self.clubs[self.c]
+        club_name = self.clubs[self.c]
+        club = Club.objects.get(name=club_name)
         self.player = Player.objects.get(id=data['player'])
         self.player.price = 1
-        self.player.club = Club.objects.get(name=club)
+        self.player.club = club
         payload = {
             'event': 'start_bid',
             'id': self.player.id,
@@ -83,8 +84,8 @@ class Consumer(WebsocketConsumer):
             'role': self.player.role,
             'team': self.player.team,
             'price': self.player.price,
-            'club': club,
-            'label': F'team{self.c + 1}'
+            'club': club_name,
+            'label': club.label
         }
         self.phase = "bids"
         self.send(text_data=dumps(payload))
