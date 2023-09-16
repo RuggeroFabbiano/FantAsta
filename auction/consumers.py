@@ -133,7 +133,7 @@ class Consumer(WebsocketConsumer):
         self.phase = "awaiting choice"
         clubs = Club.objects
         if self.c is None:  # first auction turn: init.
-            club = clubs.filter(next_call__isnull=False) or clubs.first()
+            club = (clubs.filter(next_call__isnull=False) or clubs).first()
             self.c = self.clubs.index(club.name)
             self.r = self.roles.index(club.next_call or 'P')
         else:
