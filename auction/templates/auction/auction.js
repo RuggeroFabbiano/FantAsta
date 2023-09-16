@@ -136,12 +136,12 @@ function showAuctionDashboard() {
             console.log(player);
             var row = $(`#${player.role}`).children(".empty").first();
             console.log(row);
-            $(row).html(`
+            row.html(`
                 <td>${player.name}</td>
                 <td>${player.team}</td>
                 <td>${player.price}</td>
             `);
-            $(row).removeClass("empty");
+            row.removeClass("empty");
         }
     });
 }
