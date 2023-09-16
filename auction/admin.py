@@ -8,17 +8,17 @@ from .models import Club, Player
 
 @register(Club)
 class ClubAdmin(ModelAdmin):
-    """aaaa"""
+    """Club participating to the ligue"""
 
-    fields = ['name', 'money', 'user']
+    fields = ['name', 'user']
 
 
 @register(Player)
 class PlayerAdmin(ImportExportModelAdmin):
-    """aaa"""
+    """Serie A player"""
 
     class PlayerResource(ModelResource):
-        """aaa"""
+        """Import/export resource"""
         class Meta:
             model = Player
 
