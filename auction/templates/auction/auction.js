@@ -358,7 +358,7 @@ function addPlayer(data) {
     $(row).html(`
         <td>${data.player.name}</td>
         <td>${data.player.team}</td>
-        <td>${data.player.price}</td>
+        <td align="right">${data.player.price}</td>
     `);
     $(row).removeClass("empty");
     $("#current-money").text(data.money);
@@ -366,9 +366,3 @@ function addPlayer(data) {
 
 // Socket close
 socket.onclose = function(e) {console.error("Web socket closed unexpectedly");}
-
-
-
-
-// CONTROLLI
-//   uno non può più rilanciare né chiamare se è pieno per quel ruolo

@@ -23,4 +23,3 @@ class PlayerAdmin(ImportExportModelAdmin):
             model = Player
 
     resource_class = PlayerResource
-    fields = ['name', 'team', 'role', 'price']
