@@ -155,8 +155,18 @@ button[disabled] {
   border-radius: 15px;
   padding: 1rem 3rem;
   margin: auto 0;
+  position: relative;
 }
 
+#current-bid-cover {
+  position: absolute;
+  background-color: white;
+  top: 5px;
+  left: 5px;
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  display: flex;
+}
 #bid-countdown-container {
   border: 1pt solid DarkMagenta;
   height: 50pt;

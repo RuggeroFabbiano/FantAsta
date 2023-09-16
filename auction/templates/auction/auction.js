@@ -77,7 +77,7 @@ socket.onmessage = function(event) {
     switch (payload.event) {
         case "join":
             phase = payload.phase;
-            if (phase === "awaiting participants") { // TEMP
+            if (phase !== "awaiting participants") { // TEMP
                 setParticipants(payload.participants);
                 if (payload.participants.length === payload.total) {
                     $("#start-stop").prop("disabled", false);
@@ -218,6 +218,7 @@ function startBids(data) {
     $(".bid-button").prop("disabled", false);
     $("#bid-countdown-container").show();
     $("#assign").prop("disabled", false);
+    $("current-bid-cover").remove();
     $("bid-player-info").html(`
         <div>${data.name}</div>
         <div style="margin: 0 3rem">${getRoleIcon(data.role)}</div>
