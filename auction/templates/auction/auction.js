@@ -77,12 +77,7 @@ socket.onmessage = function(event) {
     switch (payload.event) {
         case "join":
             phase = payload.phase;
-            if (phase === "awaiting participants") { // TEMP
-                setParticipants(payload.participants);
-                if (payload.participants.length === payload.total) {
-                    $("#start-stop").prop("disabled", false);
-                } else {$("#start-stop").prop("disabled", true);}
-            }
+            if (phase === "awaiting participants") {setParticipants(payload.participants);}
             else {showAuctionDashboard();}
             break;
         case "start_auction":
@@ -105,9 +100,9 @@ socket.onmessage = function(event) {
             updateBid(payload);
             startCountDown("bid");
             break;
-        // case "stop_auction":
-        //     stopAuction();
-        //     break;
+        case "stop_auction":
+            stopAuction();
+            break;
         default:
             console.log(payload.event);
             console.error("Unknown message event");
@@ -218,7 +213,7 @@ function startBids(data) {
     $(".bid-button").prop("disabled", false);
     $("#bid-countdown-container").show();
     $("#assign").prop("disabled", false);
-    $("#current-bid-cover").remove();
+    $("#current-bid-cover").hide();
     $("#bid-player-info").html(`
         <div>${data.name}</div>
         <div style="margin: 0 3rem">${getRoleIcon(data.role)}</div>
@@ -251,21 +246,19 @@ function updateBid(data) {
 /**
  * Stop auction
  */
-// function stopAuction() {
-//     waitingForCall = true;
-//     clearTimeout(callTimeout);
-//     clearTimeout(bidTimeout);
-//     $("#auction-info").hide();
-//     $("#auction-chat").hide();
-//     // Make AJAX call to fetch updated teams before showing this
-//     $("#teams-info").show();
-// }
+function stopAuction() {
+    clearTimeout(callTimeout);
+    clearTimeout(bidTimeout);
+    $(".bid-button").prop("disabled", true);
+    $("#assign").prop("disabled", true);
+    $("#current-bid-cover").show();
+}
 
 
 // UTILITY FUNCTIONS
 
 /**
- * Send message through the web-socket. Ensure data is not missing the "event" key.
+ * Send message through the web-socket. Ensure data is not missing the `event` key.
  * @param {Object} data the raw data to be sent 
  */
 function send(data) {

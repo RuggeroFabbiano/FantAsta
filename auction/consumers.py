@@ -10,9 +10,8 @@ class Consumer(WebsocketConsumer):
     """Socket consumer: handle and dispatch messages"""
 
     group = 'asta'
-    participants = []
     phase = 'awaiting participants'
-    clubs = list(Club.objects.values_list('name', flat=True))
+    clubs = []
     roles = [r for r,_ in ROLES]
     c = r = None
     player = None
@@ -22,7 +21,7 @@ class Consumer(WebsocketConsumer):
         group_add = async_to_sync(self.channel_layer.group_add)
         group_add(self.group, self.channel_name)
         self.accept()
-        self.participants.append(self.scope['user'].username)
+        self.clubs.append(self.scope['user'].club.name)
         group_send = async_to_sync(self.channel_layer.group_send)
         group_send(self.group, {'type': 'update.participants'})
 
@@ -50,8 +49,7 @@ class Consumer(WebsocketConsumer):
             data = {'event': 'continue', 'type': 'buy'}
         # Auction stop
         if event == 'stop_auction':
-            data = payload
-            data['type'] = 'broadcast'
+            data = {'type': 'stop.auction'}
         # Dispatch
         group_send(self.group, data)
 
@@ -59,8 +57,7 @@ class Consumer(WebsocketConsumer):
         """Set participant list"""
         payload = {
             'event': 'join',
-            'participants': self.participants,
-            'total': len(self.clubs),
+            'participants': self.clubs,
             'phase': self.phase
         }
         self.send(text_data=dumps(payload))
@@ -113,23 +110,28 @@ class Consumer(WebsocketConsumer):
         payload['money'] = self.player.club.money
         self.send(text_data=dumps(payload))
 
-    def broadcast(self, data: dict) -> None:
-        """Broadcast message as-is"""
+    def stop_auction(self, data: dict) -> None:
+        """Pause auction saving current turn"""
+        self.phase = 'paused'
+        self.player = None
+        club = Club.objects.get(name=self.clubs[self.c])
+        club.next_call = self.roles[self.r]
+        club.save()
         self.send(text_data=dumps(data))
 
     def disconnect(self, code):
         """Leave auction"""
-        self.participants.remove(self.scope['user'].username)
-        group_send = async_to_sync(self.channel_layer.group_send)
-        group_send(self.group, {'type': 'update.participants'})
+        self.clubs.remove(self.scope['user'].club.name)
         group_discard = async_to_sync(self.channel_layer.group_discard)
         group_discard(self.group, self.channel_name)
+        group_send = async_to_sync(self.channel_layer.group_send)
+        group_send(self.group, {'type': 'update.participants'})
 
     def _set_next_round(self) -> dict:
         """Set caller club and to-call role for next turn"""
         self.phase = "awaiting choice"
+        clubs = Club.objects
         if self.c is None:  # first auction turn: init.
-            clubs = Club.objects
             club = clubs.filter(next_call__isnull=False) or clubs.first()
             self.c = self.clubs.index(club.name)
             self.r = self.roles.index(club.next_call or 'P')
@@ -137,9 +139,6 @@ class Consumer(WebsocketConsumer):
             self.r = (self.r + 1) % 4
             if self.r == 0:
                 self.c = (self.c + 1) % len(self.clubs)
-                club = Club.objects.get(name=self.clubs[self.c])
-                while club.user.username not in self.participants:
-                    self.c = (self.c + 1) % len(self.clubs)
         return {'club': self.clubs[self.c], 'role': self.roles[self.r]}
 
 
