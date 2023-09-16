@@ -56,12 +56,3 @@ class ClubPlayerList(View):
             } for p in players
         ]
         return JsonResponse(data, safe=False)
-
-
-# CHAT
-
-def index(request):
-    return render(request, "auction/index.html")
-
-def room(request, room_name):
-    return render(request, "auction/room.html", {"room_name": room_name})
