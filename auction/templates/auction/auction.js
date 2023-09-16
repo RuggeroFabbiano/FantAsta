@@ -81,7 +81,7 @@ socket.onmessage = function(event) {
             else {showAuctionDashboard();}
             break;
         case "start_auction":
-            showAuctionDashboard();
+            if (phase !== "stopped") {showAuctionDashboard();}
             // not breaking here since we also wanna execute first round when starting
         case "continue":
             phase = "awaiting choice";
@@ -101,6 +101,7 @@ socket.onmessage = function(event) {
             startCountDown("bid");
             break;
         case "stop_auction":
+            phase = "stopped";
             stopAuction();
             break;
         default:
@@ -128,11 +129,8 @@ function showAuctionDashboard() {
     $("#participants").hide();
     $("#auction-dashboard").show();
     $.get("{% url 'players-club' %}").done(function(data) {
-        console.log("Get player done");
         for (let player of data) {
-            console.log(player);
             var row = $(`#${player.role}`).children(".empty").first();
-            console.log(row);
             row.html(`
                 <td>${player.name}</td>
                 <td>${player.team}</td>
