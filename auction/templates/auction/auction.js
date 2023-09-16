@@ -218,8 +218,8 @@ function startBids(data) {
     $(".bid-button").prop("disabled", false);
     $("#bid-countdown-container").show();
     $("#assign").prop("disabled", false);
-    $("current-bid-cover").remove();
-    $("bid-player-info").html(`
+    $("#current-bid-cover").remove();
+    $("#bid-player-info").html(`
         <div>${data.name}</div>
         <div style="margin: 0 3rem">${getRoleIcon(data.role)}</div>
         <div>${data.team}</div>
