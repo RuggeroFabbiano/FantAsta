@@ -9,8 +9,8 @@ from .models import ROLES, Club, Player
 class Consumer(WebsocketConsumer):
     """Socket consumer: handle and dispatch messages"""
 
-    group = 'asta'
-    phase = 'awaiting participants'
+    group = "asta"
+    phase = "awaiting participants"
     clubs = []
     roles = [r for r,_ in ROLES]
     c = r = None
@@ -67,6 +67,7 @@ class Consumer(WebsocketConsumer):
         """Launch next round"""
         payload = self._set_next_round()
         payload['event'] = data['event']
+        self.phase = "awaiting choice"
         self.send(text_data=dumps(payload))
 
     def start_bid(self, data: dict) -> None:
@@ -85,6 +86,7 @@ class Consumer(WebsocketConsumer):
             'club': club,
             'label': F'team{self.c + 1}'
         }
+        self.phase = "bids"
         self.send(text_data=dumps(payload))
 
     def update_bid(self, data: dict) -> None:
@@ -95,10 +97,7 @@ class Consumer(WebsocketConsumer):
 
     def buy(self, data: dict) -> None:
         """Assign player of current bid and continue"""
-        print("SALVO GIOCATORE")
         self.player.save()
-        print("GIOCATORE SALVATO")
-        print("GIOCATORE COMPRATO DA ", self.player.club)
         payload = self._set_next_round()
         payload['event'] = 'continue'
         payload['buyer'] = self.player.club.name
@@ -109,15 +108,16 @@ class Consumer(WebsocketConsumer):
             'price': self.player.price
         }
         payload['money'] = self.player.club.money
+        self.phase = "awaiting choice"
         self.send(text_data=dumps(payload))
 
     def stop_auction(self, data: dict) -> None:
         """Pause auction saving current turn"""
-        self.phase = 'paused'
         self.player = None
         club = Club.objects.get(name=self.clubs[self.c])
         club.next_call = self.roles[self.r]
         club.save()
+        self.phase = "paused"
         self.send(text_data=dumps(data))
 
     def disconnect(self, code):
@@ -130,13 +130,12 @@ class Consumer(WebsocketConsumer):
 
     def _set_next_round(self) -> dict:
         """Set caller club and to-call role for next turn"""
-        self.phase = "awaiting choice"
         clubs = Club.objects
-        if self.c is None:  # first auction turn: init.
+        if self.phase == 'awaiting participants':  # first auction turn: init.
             club = (clubs.filter(next_call__isnull=False) or clubs).first()
             self.c = self.clubs.index(club.name)
             self.r = self.roles.index(club.next_call or 'P')
-        else:
+        elif self.phase != 'paused':
             self.r = (self.r + 1) % 4
             if self.r == 0:
                 self.c = (self.c + 1) % len(self.clubs)
