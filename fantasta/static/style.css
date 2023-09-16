@@ -151,6 +151,7 @@ button[disabled] {
 
 #current-bid {
   height: 200px;
+  border: 1pt solid black;
   border-radius: 15px;
   padding: 1rem 3rem;
   margin: auto 0;
