@@ -26,9 +26,11 @@ function startStop(element) {
  * Call next player and start bids
  */
 function selectPlayer() {
-    clearInterval(callTimeout);
     const playerID = $("#player-selector").val();
-    if (playerID) {send({"event": "start_bid", "player": playerID});}
+    if (playerID) {
+        clearInterval(callTimeout);
+        send({"event": "start_bid", "player": playerID});
+    }
 }
 
 /**
