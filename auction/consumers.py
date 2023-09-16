@@ -49,7 +49,8 @@ class Consumer(WebsocketConsumer):
             data = {'event': 'continue', 'type': 'buy'}
         # Auction stop
         if event == 'stop_auction':
-            data = {'type': 'stop.auction'}
+            data = payload
+            data['type'] = 'stop.auction'
         # Dispatch
         group_send(self.group, data)
 
