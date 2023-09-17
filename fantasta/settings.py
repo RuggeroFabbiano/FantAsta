@@ -95,7 +95,7 @@ DATABASES = {
         'PASSWORD': environ['MYSQL_PASSWORD']
     }
 }
-DEBUG = True # ENV == 'dev'
+DEBUG = ENV == 'dev'
 
 if ENV == 'dev':
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

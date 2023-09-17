@@ -257,7 +257,7 @@ function showPlayerInfo(data) {
 function startBids(data) {
     $("#bid-player-info").html(`
         <div>${data.name}</div>
-        <div style="margin: 0 3rem">${getRoleIcon(data.role)}</div>
+        <div>${getRoleIcon(data.role)}</div>
         <div>${data.team}</div>
     `);
     $("#current-bid-cover").hide();

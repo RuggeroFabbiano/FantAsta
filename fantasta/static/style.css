@@ -128,14 +128,13 @@ button[disabled] {
   display: flex;
   justify-content: space-around;
   border-radius: 10px;
-  height: 100%;
+  height: 60px;
 }
 
 #selection-choice, #selection-result {
   background-color: DarkMagenta;
   color: white;
 }
-#selection-result {font-size: 20pt}
 
 #selection-wait {background-color: darkgrey}
 
@@ -150,12 +149,11 @@ button[disabled] {
 #bid-info {margin: 20px}
 
 #current-bid {
-  height: 200px;
   border: 1pt solid black;
   border-radius: 15px;
-  padding: 1rem 3rem;
-  /* margin: auto 0; */
+  padding: 1rem 1.5rem;
   position: relative;
+  min-width: 300px;
 }
 
 #current-bid-cover {
@@ -234,6 +232,7 @@ tr+tr {border-top: 1pt solid #F1C68E}
   #custom-bid {margin-top: 1rem}
   #bid-countdown-container {margin: 2rem auto}
   #participants {width: 75%}
+  #selection-result {font-size: 16pt}
 }
 
 @media(min-width: 850px) {
@@ -247,6 +246,7 @@ tr+tr {border-top: 1pt solid #F1C68E}
     margin: 0 auto 2rem;
   }
   #bid-countdown-container {margin-top: 3rem}
+  #selection-result {font-size: 20pt}
 }
 
 #select-player {
