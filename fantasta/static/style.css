@@ -232,7 +232,7 @@ tr+tr {border-top: 1pt solid #F1C68E}
     margin: 1rem 0;
   }
   #custom-bid {margin-top: 1rem}
-  #bid-countdown-container {margin: 2rem 0}
+  #bid-countdown-container {margin: 2rem auto}
 }
 
 @media(min-width: 850px) {

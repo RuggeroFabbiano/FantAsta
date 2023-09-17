@@ -90,7 +90,7 @@ class Consumer(WebsocketConsumer):
                 payload['name'] = self.player.name
                 payload['role'] = self.player.role
                 payload['team'] = self.player.team
-                payload['price'] = Player.object.get(id=self.player.id).price
+                payload['price'] = Player.objects.get(id=self.player.id).price
                 payload['amount'] = self.player.price
             self.send(text_data=dumps(payload))
 
