@@ -74,7 +74,7 @@ class Consumer(WebsocketConsumer):
 
     def late_join(self, data: dict) -> None:
         """Send current state to late joiner"""
-        if data['new'] != self.scope['user'].club.name:
+        if data['club'] != self.scope['user'].club.name:
             payload = {
                 'event': 'late_join',
                 'phase': self.phase,
