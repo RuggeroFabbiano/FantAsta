@@ -36,10 +36,6 @@ class Consumer(WebsocketConsumer):
         # Late join
         if event == 'late_join':
             data = payload
-            data['type'] = 'late.join'
-        # Synchronise (late joiner)
-        if event == 'synchronise':
-            data = payload
             data['type'] = 'synchronise'
         # Auction start / New-round start
         if event in ['start_auction', 'continue']:
@@ -72,38 +68,22 @@ class Consumer(WebsocketConsumer):
         }
         self.send(text_data=dumps(payload))
 
-    def late_join(self, data: dict) -> None:
-        """Send current state to late joiner"""
-        payload = {
-            'event': 'late_join',
-            'new': data['club'],
-            'phase': self.phase,
-            'participants': list(self.clubs),
-            'club': self.club,
-            'r': self.r,
-            'role': self.roles[self.r],
-            'player': self.player and self.player.id,
-            'bidder': data['bidder'],
-            'label': data['label']
-        }
-        if self.player is not None:
-            payload['name'] = self.player.name
-            payload['role'] = self.player.role
-            payload['team'] = self.player.team
-            payload['price'] = Player.objects.get(id=self.player.id).price
-            payload['amount'] = self.player.price
-        self.send(text_data=dumps(payload))
-
     def synchronise(self, data: dict) -> None:
-        """Synchronise late joiner"""
-        self.phase = data['phase']
-        self.clubs = set(data['participants'])
-        self.club = data['club']
-        self.r = data['r']
-        self.player = data['player'] and Player.objects.get(id=data['player'])
-        payload = {
-            'event': 'synchronise', 'club': self.scope['user'].club.name
-        }
+        """Synchronise state and send confirmation"""
+        p_id = data['player']
+        if self.scope['user'].club.name == data['club']:
+            self.phase = data['phase']
+            self.clubs = set(data['participants'])
+            self.club = data['caller']
+            self.r = data['role'] and self.roles.index(data['role'])
+            self.player = p_id and Player.objects.get(id=p_id)
+        payload = data
+        payload['event'] = 'synchronise'
+        if self.player is not None:
+            self.player.price = data['amount']
+            payload['name'] = self.player.name
+            payload['team'] = self.player.team
+            payload['price'] = self.player.price
         self.send(text_data=dumps(payload))
 
     def set_next_round(self, data: dict) -> None:

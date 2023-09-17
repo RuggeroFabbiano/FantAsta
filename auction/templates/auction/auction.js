@@ -3,7 +3,7 @@ const host = window.location.host;
 const protocol = host.startsWith("localhost")? "ws" : "wss";
 const socket = new WebSocket(protocol + "://" + host + "/ws" + "{{request.path}}");
 
-var phase, caller, callTimeout, bidTimeout;
+var participantList, phase, caller, role, player, callTimeout, bidTimeout;
 var slots = {"P": 3, "D": 8, "C": 8, "A": 6}
 
 
@@ -79,34 +79,46 @@ socket.onmessage = function(event) {
         case "join":
             // New participants: initialise
             if (!phase) {phase = "awaiting participants";}
-            if (phase === "awaiting participants") {setParticipants(payload.participants);}
-            // Detected late joiner while auction started: share global values for synchronisation
-            else if ("{{user.club}}" === caller) {
+            setParticipants(payload.participants);
+            // Detected late joiner after auction started: share global values for synchronisation
+            if ("{{user.club}}" === caller) {
                 const bidder = $("#bidder").text();
                 const label = $("#current-bid").attr("class");
-                send({"event": "late_join", "club": payload.new, "bidder": bidder, "label": label});
+                const amount = parseInt($("#best-bid").text());
+                send({
+                    "event": "late_join",
+                    "club": payload.new,
+                    "phase": phase,
+                    "participants": participantList,
+                    "caller": caller,
+                    "role": role,
+                    "player": player,
+                    "bidder": bidder,
+                    "label": label,
+                    "amount": amount
+                });
             }
             break;
-        case "late_join":
-            if ("{{user.club}}" === payload.new) {
-                if (phase === "awaiting participants") {
-                    phase = payload.phase;
-                    showAuctionDashboard();
-                    if (payload.phase === "awaiting choice") {
-                        setPlayerChoice(payload.club, payload.role);
-                        stopBids();
-                        $("#current-bid-cover").show();
-                    } else {
-                        showPlayerInfo(payload);
-                        startBids(payload);
-                        // `updateBid` expects the bidder club being named `club`, but since this
-                        // payload contains data for both init. and bid "catch-up", it has been
-                        // named `bidder` to not override `club` holding current turn
-                        payload.club = payload.bidder;
-                        updateBid(payload);
-                    }
-                    payload.event = "synchronise";
-                    send(payload);
+        case "synchronise":
+            if ("{{user.club}}" === payload.club) {
+                phase = payload.phase;
+                participantList = payload.participants;
+                showAuctionDashboard();
+                if (phase === "awaiting choice") {
+                    caller = payload.caller;
+                    role = payload.role;
+                    setPlayerChoice(payload.caller, payload.role);
+                    stopBids();
+                    $("#current-bid-cover").show();
+                } else {
+                    player = payload.player;
+                    showPlayerInfo(payload);
+                    startBids(payload);
+                    // `updateBid` expects the bidder club being named `club`, but since this
+                    // payload contains data for both init. and bid "catch-up", it has been
+                    // named `bidder` to not override `club` holding current turn
+                    payload.club = payload.bidder;
+                    updateBid(payload);
                 }
             }
             break;
@@ -118,11 +130,13 @@ socket.onmessage = function(event) {
             stopBids();
             if ("{{user.club}}" === payload.buyer) {addPlayer(payload);}
             caller = payload.club;
+            role = payload.role;
             setPlayerChoice(payload.club, payload.role);
             if ("{{user.club}}" === payload.club) {startCountDown("call");}
             break;
         case "start_bid":
             phase = "bids";
+            player = payload.id;
             showPlayerInfo(payload);
             startBids(payload);
             // not breaking here since we also wanna execute first round when starting
@@ -145,6 +159,7 @@ socket.onmessage = function(event) {
  * @param {String} participants connected users
  */
 function setParticipants(participants) {
+    participantList = participants;
     $("#participants > p").each(function() {
         if (participants.includes($(this).attr("class"))) {$(this).show();}
         else {$(this).hide();}
