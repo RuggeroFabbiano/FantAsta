@@ -11,17 +11,16 @@ class Consumer(WebsocketConsumer):
 
     group = "asta"
     phase = "awaiting participants"
-    clubs = []
+    clubs = set()
     roles = [r for r,_ in ROLES]
-    c = r = None
-    player = None
+    club = r = player = None
 
     def connect(self):
         """Open web-socket connection"""
         group_add = async_to_sync(self.channel_layer.group_add)
         group_add(self.group, self.channel_name)
         self.accept()
-        self.clubs.append(self.scope['user'].club.name)
+        self.clubs.add(self.scope['user'].club.name)
         group_send = async_to_sync(self.channel_layer.group_send)
         group_send(self.group, {'type': 'update.participants'})
 
@@ -66,7 +65,7 @@ class Consumer(WebsocketConsumer):
         """Set participant list"""
         payload = {
             'event': 'join',
-            'participants': self.clubs,
+            'participants': list(self.clubs),
             'phase': self.phase
         }
         self.send(text_data=dumps(payload))
@@ -76,8 +75,8 @@ class Consumer(WebsocketConsumer):
         payload = {
             'event': 'late_join',
             'phase': self.phase,
-            'participants': self.clubs,
-            'c': self.c,
+            'participants': list(self.clubs),
+            'club': self.club,
             'r': self.r,
             'player': self.player and self.player.id
         }
@@ -86,8 +85,8 @@ class Consumer(WebsocketConsumer):
     def synchronise(self, data: dict) -> None:
         """Synchronise late joiner"""
         self.phase = data['phase']
-        self.clubs = data['participants']
-        self.c = data['c']
+        self.clubs = set(data['participants'])
+        self.club = data['club']
         self.r = data['r']
         self.player = data['player'] and Player.objects.get(id=data['player'])
         payload = {
@@ -107,8 +106,7 @@ class Consumer(WebsocketConsumer):
 
     def start_bid(self, data: dict) -> None:
         """Select a new player and open bids"""
-        club_name = self.clubs[self.c]
-        club = Club.objects.get(name=club_name)
+        club = Club.objects.get(name=self.club)
         self.player = Player.objects.get(id=data['player'])
         self.player.price = 1
         self.player.club = club
@@ -119,7 +117,7 @@ class Consumer(WebsocketConsumer):
             'role': self.player.role,
             'team': self.player.team,
             'price': self.player.price,
-            'club': club_name,
+            'club': self.club,
             'label': club.label
         }
         self.phase = "bids"
@@ -153,7 +151,7 @@ class Consumer(WebsocketConsumer):
     def stop_auction(self, data: dict) -> None:
         """Pause auction saving current turn"""
         self.player = None
-        club = Club.objects.get(name=self.clubs[self.c])
+        club = Club.objects.get(name=self.club)
         club.next_call = self.roles[self.r]
         club.save()
         self.phase = "stopped"
@@ -169,30 +167,27 @@ class Consumer(WebsocketConsumer):
 
     def _set_next_round(self) -> dict:
         """Set caller club and to-call role for next turn"""
-        clubs = Club.objects
+        clubs_names = sorted(list(self.clubs))
+        clubs = Club.objects.filter(name__in=clubs_names)
         if self.phase == 'awaiting participants':  # first auction turn: init.
-            club = (
-                clubs.filter(next_call__isnull=False) or
-                clubs.filter(name__in=self.clubs)
-            ).first()
-            self.c = self.clubs.index(club.name)
-            self.r = self.roles.index(club.next_call or 'P')
-            name = self.clubs[self.c]
-            role = self.roles[self.r]
+            club = (clubs.filter(next_call__isnull=False) or clubs).first()
+            self.club = club.name
+            role = club.next_call or 'P'
+            self.r = self.roles.index(role)
         elif self.phase != 'stopped':
             # Determines next caller taking into account if roster is
             # already full for the given role
             cannot_call = True
             # Set check condition to avoid infinite loop
-            c0 = self.c
-            r0 = self.r
+            club_0 = self.club
+            r_0 = self.r
             while cannot_call:
                 self.r = (self.r + 1) % 4
                 if self.r == 0:
-                    self.c = (self.c + 1) % len(self.clubs)
-                name = self.clubs[self.c]
+                    c = (clubs_names.index(self.club) + 1) % len(clubs_names)
+                    self.club = clubs_names[c]
                 role = self.roles[self.r]
-                cannot_call = clubs.get(name=name).is_full(role)
-                if cannot_call and self.c == c0 and self.r == r0:
+                cannot_call = clubs.get(name=self.club).is_full(role)
+                if cannot_call and self.club == club_0 and self.r == r_0:
                     return {'event': 'end'}
-        return {'club': name, 'role': role}
+        return {'club': self.club, 'role': role}

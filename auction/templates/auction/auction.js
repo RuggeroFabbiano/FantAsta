@@ -77,13 +77,12 @@ socket.onmessage = function(event) {
     console.log(payload);
     switch (payload.event) {
         case "join":
+            // New participants: initialise
             if (!phase) {
                 phase = "awaiting participants";
                 setParticipants(payload.participants);
-            } else {
-                // Share global values with late joiner to synchronise him
-                if ("{{user.is_superuser}}" === "True") {send({"event": "late_join"});}
-            }
+            // Detected late joiner while auction started: share global values for synchronisation
+            } else if (phase !== "awaiting participants") {send({"event": "late_join"});}
             break;
         case "late_join":
             if (phase === "awaiting participants") {
