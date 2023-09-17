@@ -3,7 +3,7 @@ const host = window.location.host;
 const protocol = host.startsWith("localhost")? "ws" : "wss";
 const socket = new WebSocket(protocol + "://" + host + "/ws" + "{{request.path}}");
 
-var phase, callTimeout, bidTimeout;
+var phase, caller, callTimeout, bidTimeout;
 var slots = {"P": 3, "D": 8, "C": 8, "A": 6}
 
 
@@ -81,32 +81,35 @@ socket.onmessage = function(event) {
             if (!phase) {phase = "awaiting participants";}
             if (phase === "awaiting participants") {setParticipants(payload.participants);}
             // Detected late joiner while auction started: share global values for synchronisation
-            else {
+            else if ("{{user.club}}" === caller) {
                 const bidder = $("#bidder").text();
                 const label = $("#current-bid").attr("class");
                 send({"event": "late_join", "club": payload.new, "bidder": bidder, "label": label});
             }
             break;
         case "late_join":
-            if (phase === "awaiting participants") {
-                phase = payload.phase;
-                showAuctionDashboard();
-                if (payload.phase === "awaiting choice") {
-                    setPlayerChoice(payload.club, payload.role);
-                    stopBids();
-                    $("#current-bid-cover").show();
-                } else {
-                    showPlayerInfo(payload);
-                    startBids(payload);
-                    // `updateBid` expects the bidder club being named `club`, but since this
-                    // payload contains data for both init. and bid "catch-up", it has been named
-                    // `bidder` to not override `club` holding current turn
-                    payload.club = payload.bidder;
-                    updateBid(payload);
+            if ("{{user.club}}" === payload.new) {
+                if (phase === "awaiting participants") {
+                    phase = payload.phase;
+                    showAuctionDashboard();
+                    if (payload.phase === "awaiting choice") {
+                        setPlayerChoice(payload.club, payload.role);
+                        stopBids();
+                        $("#current-bid-cover").show();
+                    } else {
+                        showPlayerInfo(payload);
+                        startBids(payload);
+                        // `updateBid` expects the bidder club being named `club`, but since this
+                        // payload contains data for both init. and bid "catch-up", it has been
+                        // named `bidder` to not override `club` holding current turn
+                        payload.club = payload.bidder;
+                        updateBid(payload);
+                    }
+                    payload.event = "synchronise";
+                    send(payload);
                 }
-                payload.event = "synchronise";
-                send(payload);
             }
+            break;
         case "start_auction":
             if (phase !== "stopped") {showAuctionDashboard();}
             // not breaking here since we also wanna execute first round when starting
@@ -114,6 +117,7 @@ socket.onmessage = function(event) {
             phase = "awaiting choice";
             stopBids();
             if ("{{user.club}}" === payload.buyer) {addPlayer(payload);}
+            caller = payload.club;
             setPlayerChoice(payload.club, payload.role);
             if ("{{user.club}}" === payload.club) {startCountDown("call");}
             break;

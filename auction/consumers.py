@@ -77,6 +77,7 @@ class Consumer(WebsocketConsumer):
         if data['club'] != self.scope['user'].club.name:
             payload = {
                 'event': 'late_join',
+                'new': data['club'],
                 'phase': self.phase,
                 'participants': list(self.clubs),
                 'club': self.club,
