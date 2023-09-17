@@ -232,9 +232,10 @@ tr+tr {border-top: 1pt solid #F1C68E}
     margin: 1rem 0;
   }
   #custom-bid {margin-top: 1rem}
+  #bid-countdown-container {}
 }
 
-@media(min-width: 768px) {
+@media(min-width: 850px) {
   #selection-wrapper {width: 67%}
   #round-info-wrapper {
     flex-direction: row;
@@ -244,6 +245,7 @@ tr+tr {border-top: 1pt solid #F1C68E}
     width: 50%;
     margin: 0 auto 2rem;
   }
+  #bid-countdown-container {margin: 2rem 0}
 }
 
 #select-player {
