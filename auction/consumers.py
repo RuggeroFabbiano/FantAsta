@@ -74,26 +74,25 @@ class Consumer(WebsocketConsumer):
 
     def late_join(self, data: dict) -> None:
         """Send current state to late joiner"""
-        if data['club'] != self.scope['user'].club.name:
-            payload = {
-                'event': 'late_join',
-                'new': data['club'],
-                'phase': self.phase,
-                'participants': list(self.clubs),
-                'club': self.club,
-                'r': self.r,
-                'role': self.roles[self.r],
-                'player': self.player and self.player.id,
-                'bidder': data['bidder'],
-                'label': data['label']
-            }
-            if self.player is not None:
-                payload['name'] = self.player.name
-                payload['role'] = self.player.role
-                payload['team'] = self.player.team
-                payload['price'] = Player.objects.get(id=self.player.id).price
-                payload['amount'] = self.player.price
-            self.send(text_data=dumps(payload))
+        payload = {
+            'event': 'late_join',
+            'new': data['club'],
+            'phase': self.phase,
+            'participants': list(self.clubs),
+            'club': self.club,
+            'r': self.r,
+            'role': self.roles[self.r],
+            'player': self.player and self.player.id,
+            'bidder': data['bidder'],
+            'label': data['label']
+        }
+        if self.player is not None:
+            payload['name'] = self.player.name
+            payload['role'] = self.player.role
+            payload['team'] = self.player.team
+            payload['price'] = Player.objects.get(id=self.player.id).price
+            payload['amount'] = self.player.price
+        self.send(text_data=dumps(payload))
 
     def synchronise(self, data: dict) -> None:
         """Synchronise late joiner"""
