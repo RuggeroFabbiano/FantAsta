@@ -184,4 +184,6 @@ class Consumer(WebsocketConsumer):
                 cannot_call = clubs.get(name=self.club).is_full(role)
                 if cannot_call and self.club == club_0 and self.r == r_0:
                     return {'event': 'end'}
+        else:
+            role = self.roles[self.r]
         return {'club': self.club, 'role': role}
