@@ -77,13 +77,20 @@ socket.onmessage = function(event) {
     console.log(payload);
     switch (payload.event) {
         case "join":
-            phase = payload.phase;
-            setParticipants(payload.participants);
-            if (phase === undefined) {
-                phase = payload.phase;
-                showAuctionDashboard();
+            if (!phase) {
+                phase = "awaiting participants";
+                setParticipants(payload.participants);
+            } else {
+                // Share global values with late joiner to synchronise him
+                if ("{{user.is_superuser}}" === "True") {send({"event": "late_join"});}
             }
             break;
+        case "late_join":
+            if (phase === "awaiting participants") {
+                showAuctionDashboard();
+                payload.event = "synchronise";
+                send(payload);
+            }
         case "start_auction":
             if (phase !== "stopped") {showAuctionDashboard();}
             // not breaking here since we also wanna execute first round when starting
@@ -109,8 +116,7 @@ socket.onmessage = function(event) {
             stopAuction();
             break;
         default:
-            console.log(payload.event);
-            console.error("Unknown message event");
+            console.log(payload);
     }
 };
 

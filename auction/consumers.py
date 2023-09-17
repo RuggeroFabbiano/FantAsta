@@ -33,6 +33,14 @@ class Consumer(WebsocketConsumer):
         payload = loads(text_data)
         group_send = async_to_sync(self.channel_layer.group_send)
         event = payload['event']
+        # Late join
+        if event == 'late_join':
+            data = payload
+            data['type'] = 'late.join'
+        # Synchronise (late joiner)
+        if event == 'synchronise':
+            data = payload
+            data['type'] = 'synchronise'
         # Auction start / New-round start
         if event in ['start_auction', 'continue']:
             data = {'event': event, 'type': 'set.next.round'}
@@ -60,6 +68,30 @@ class Consumer(WebsocketConsumer):
             'event': 'join',
             'participants': self.clubs,
             'phase': self.phase
+        }
+        self.send(text_data=dumps(payload))
+
+    def late_join(self, data: dict) -> None:
+        """Send current state to late joiner"""
+        payload = {
+            'event': 'late_join',
+            'phase': self.phase,
+            'participants': self.clubs,
+            'c': self.c,
+            'r': self.r,
+            'player': self.player.id and self.player.id
+        }
+        self.send(text_data=dumps(payload))
+
+    def synchronise(self, data: dict) -> None:
+        """Synchronise late joiner"""
+        self.phase = data['phase']
+        self.clubs = data['participants']
+        self.c = data['c']
+        self.r = data['r']
+        self.player = Player.objects.get(id=data['player'])
+        payload = {
+            'event': 'synchronise', 'club': self.scope['user'].club.name
         }
         self.send(text_data=dumps(payload))
 
@@ -124,7 +156,7 @@ class Consumer(WebsocketConsumer):
         club = Club.objects.get(name=self.clubs[self.c])
         club.next_call = self.roles[self.r]
         club.save()
-        self.phase = "paused"
+        self.phase = "stopped"
         self.send(text_data=dumps(data))
 
     def disconnect(self, code):
@@ -147,7 +179,7 @@ class Consumer(WebsocketConsumer):
             self.r = self.roles.index(club.next_call or 'P')
             name = self.clubs[self.c]
             role = self.roles[self.r]
-        elif self.phase != 'paused':
+        elif self.phase != 'stopped':
             # Determines next caller taking into account if roster is
             # already full for the given role
             cannot_call = True
