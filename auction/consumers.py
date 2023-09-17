@@ -79,7 +79,7 @@ class Consumer(WebsocketConsumer):
             'participants': self.clubs,
             'c': self.c,
             'r': self.r,
-            'player': self.player.id and self.player.id
+            'player': self.player and self.player.id
         }
         self.send(text_data=dumps(payload))
 
@@ -89,7 +89,7 @@ class Consumer(WebsocketConsumer):
         self.clubs = data['participants']
         self.c = data['c']
         self.r = data['r']
-        self.player = Player.objects.get(id=data['player'])
+        self.player = data['player'] and Player.objects.get(id=data['player'])
         payload = {
             'event': 'synchronise', 'club': self.scope['user'].club.name
         }
