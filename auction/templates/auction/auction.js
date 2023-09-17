@@ -84,7 +84,7 @@ socket.onmessage = function(event) {
             else {
                 const bidder = $("#bidder").text();
                 const label = $("#current-bid").attr("class");
-                send({"event": "late_join", "bidder": bidder, "label": label});
+                send({"event": "late_join", "club": payload.new, "bidder": bidder, "label": label});
             }
             break;
         case "late_join":
