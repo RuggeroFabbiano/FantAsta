@@ -66,9 +66,12 @@ class Consumer(WebsocketConsumer):
     def set_next_round(self, data: dict) -> None:
         """Launch next round"""
         payload = self._set_next_round()
-        payload['event'] = data['event']
-        self.phase = "awaiting choice"
-        self.send(text_data=dumps(payload))
+        if 'event' in payload:  # auction ended!
+            self.send(text_data=dumps(payload))
+        else:
+            payload['event'] = data['event']
+            self.phase = "awaiting choice"
+            self.send(text_data=dumps(payload))
 
     def start_bid(self, data: dict) -> None:
         """Select a new player and open bids"""
@@ -100,17 +103,20 @@ class Consumer(WebsocketConsumer):
         """Assign player of current bid and continue"""
         self.player.save()
         payload = self._set_next_round()
-        payload['event'] = 'continue'
-        payload['buyer'] = self.player.club.name
-        payload['player'] = {
-            'name': self.player.name,
-            'team': self.player.team,
-            'role': self.player.role,
-            'price': self.player.price
-        }
-        payload['money'] = self.player.club.money
-        self.phase = "awaiting choice"
-        self.send(text_data=dumps(payload))
+        if 'event' in payload:  # auction ended!
+            self.send(text_data=dumps(payload))
+        else:
+            payload['event'] = 'continue'
+            payload['buyer'] = self.player.club.name
+            payload['player'] = {
+                'name': self.player.name,
+                'team': self.player.team,
+                'role': self.player.role,
+                'price': self.player.price
+            }
+            payload['money'] = self.player.club.money
+            self.phase = "awaiting choice"
+            self.send(text_data=dumps(payload))
 
     def stop_auction(self, data: dict) -> None:
         """Pause auction saving current turn"""
@@ -136,8 +142,22 @@ class Consumer(WebsocketConsumer):
             club = (clubs.filter(next_call__isnull=False) or clubs).first()
             self.c = self.clubs.index(club.name)
             self.r = self.roles.index(club.next_call or 'P')
+            name = self.clubs[self.c]
+            role = self.roles[self.r]
         elif self.phase != 'paused':
-            self.r = (self.r + 1) % 4
-            if self.r == 0:
-                self.c = (self.c + 1) % len(self.clubs)
-        return {'club': self.clubs[self.c], 'role': self.roles[self.r]}
+            # Determines next caller taking into account if roster is
+            # already full for the given role
+            cannot_call = True
+            # Set check condition to avoid infinite loop
+            c0 = self.c
+            r0 = self.r
+            while cannot_call:
+                self.r = (self.r + 1) % 4
+                if self.r == 0:
+                    self.c = (self.c + 1) % len(self.clubs)
+                name = self.clubs[self.c]
+                role = self.roles[self.r]
+                cannot_call = clubs.get(name=name).is_full(role)
+                if cannot_call and self.c == c0 and self.r == r0:
+                    return {'event': 'end'}
+        return {'club': name, 'role': role}

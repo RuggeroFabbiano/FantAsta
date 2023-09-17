@@ -4,6 +4,7 @@ const protocol = host.startsWith("localhost")? "ws" : "wss";
 const socket = new WebSocket(protocol + "://" + host + "/ws" + "{{request.path}}");
 
 var phase, callTimeout, bidTimeout;
+var slots = {"P": 3, "D": 8, "C": 8, "A": 6}
 
 
 // ACTIONS (SEND MESSAGES)
@@ -130,6 +131,7 @@ function showAuctionDashboard() {
     $("#auction-dashboard").show();
     $.get("{% url 'players-club' %}").done(function(data) {
         for (let player of data) {
+            slots[player.role]--;
             var row = $(`#${player.role}`).children(".empty").first();
             row.html(`
                 <td>${player.name}</td>
@@ -208,15 +210,15 @@ function showPlayerInfo(data) {
  * @param {Object} data info on the calling bidder
  */
 function startBids(data) {
-    $(".bid-button").prop("disabled", false);
-    $("#bid-countdown-container").show();
-    $("#assign").prop("disabled", false);
-    $("#current-bid-cover").hide();
     $("#bid-player-info").html(`
         <div>${data.name}</div>
         <div style="margin: 0 3rem">${getRoleIcon(data.role)}</div>
         <div>${data.team}</div>
     `);
+    $("#current-bid-cover").hide();
+    $("#assign").prop("disabled", false);
+    if (slots[data.role] > 0) {$(".bid-button").prop("disabled", false);}
+    $("#bid-countdown-container").show();
 }
 
 /**
@@ -360,6 +362,7 @@ function addPlayer(data) {
     `);
     $(row).removeClass("empty");
     $("#current-money").text(data.money);
+    slots[data.player.role]--;
 }
 
 // Socket close

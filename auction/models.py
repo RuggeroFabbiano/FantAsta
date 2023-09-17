@@ -39,6 +39,12 @@ class Club(Model):
         """
         return F"team{Club.objects.filter(name__lte=self.name).count()}"
 
+    @property
+    def is_full(self, role: str) -> bool:
+        """Tell if club is full for a given role"""
+        max_allowed = {'P': 3, 'D': 8, 'C': 8, 'A': 6}[role]
+        return self.players.filter(role=role).count() == max_allowed
+
 
 class Player(Model):
     """Serie A football players"""
