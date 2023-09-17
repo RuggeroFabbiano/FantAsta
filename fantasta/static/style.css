@@ -154,7 +154,7 @@ button[disabled] {
   border: 1pt solid black;
   border-radius: 15px;
   padding: 1rem 3rem;
-  margin: auto 0;
+  /* margin: auto 0; */
   position: relative;
 }
 
