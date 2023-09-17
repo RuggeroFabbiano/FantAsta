@@ -78,11 +78,10 @@ socket.onmessage = function(event) {
     switch (payload.event) {
         case "join":
             // New participants: initialise
-            if (!phase) {
-                phase = "awaiting participants";
-                setParticipants(payload.participants);
+            if (!phase) {phase = "awaiting participants";}
+            if (phase === "awaiting participants") {setParticipants(payload.participants);}
             // Detected late joiner while auction started: share global values for synchronisation
-            } else if (phase !== "awaiting participants") {
+            else {
                 const bidder = $("#bidder").text();
                 const label = $("#current-bid").attr("class");
                 send({"event": "late_join", "bidder": bidder, "label": label});
