@@ -80,6 +80,7 @@ class Consumer(WebsocketConsumer):
         payload = data
         payload['event'] = 'synchronise'
         if self.player is not None:
+            self.player.club = data['bidder']
             self.player.price = data['amount']
             payload['name'] = self.player.name
             payload['team'] = self.player.team
