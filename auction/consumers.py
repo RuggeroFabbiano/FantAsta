@@ -139,7 +139,10 @@ class Consumer(WebsocketConsumer):
         """Set caller club and to-call role for next turn"""
         clubs = Club.objects
         if self.phase == 'awaiting participants':  # first auction turn: init.
-            club = (clubs.filter(next_call__isnull=False) or clubs).first()
+            club = (
+                clubs.filter(next_call__isnull=False) or
+                clubs.filter(name__in=self.clubs)
+            ).first()
             self.c = self.clubs.index(club.name)
             self.r = self.roles.index(club.next_call or 'P')
             name = self.clubs[self.c]
