@@ -35,16 +35,19 @@
         <div style="height: 80px; padding: 10px 20px">
           {% comment %} User of current round {% endcomment %}
           <div id="selection-choice" class="banner">
-            <div class="d-flex">
-              <p style="margin: auto">È il tuo turno!</p>
-            </div>
-            <div class="d-flex" style="height: 40px; margin: auto 0">
-              <select id="player-selector" class="form-select"></select>
-              <span style="width: 50px"></span>
-              <button id="select-player" onclick="selectPlayer()">OK</button>
-            </div>
-            <div id="choice-countdown-container" class="d-flex">
-              <p id="choice-countdown" style="margin: auto"></p>
+            <div id="selection-wrapper" class="d-flex justify-content-between" style="height: 60px">
+              <div class="no-mobile">
+                <div class="d-flex" style="height: 60px">
+                  <p style="margin: auto; font-size: 16pt">È il tuo turno!</p>
+                </div>
+              </div>
+              <div class="d-flex" style="height: 40px; margin: auto 0">
+                <select id="player-selector" class="form-select"></select>
+                <button id="select-player" onclick="selectPlayer()">OK</button>
+              </div>
+              <div id="choice-countdown-container" class="d-flex">
+                <p id="choice-countdown" style="margin: auto"></p>
+              </div>
             </div>
           </div>
           {% comment %} Other users {% endcomment %}
@@ -61,7 +64,7 @@
         {% comment %} Main page {% endcomment %}
         <div id="bid-info" class="flex-grow-1 d-flex justify-content-between">
           {% comment %} Round info {% endcomment %}
-          <div class="d-flex justify-content-around" style="width: 75%">
+          <div id="round-info-wrapper" class="d-flex justify-content-around">
             <div class="d-flex flex-column justify-content-between" style="height: 50%; margin: auto 0">
               <div id="current-bid">
                 <div id="current-bid-cover">
@@ -83,21 +86,30 @@
             </div>
             {% comment %} Bid tools {% endcomment %}
             <div id="bid-banner" class="d-flex flex-column justify-content-evenly align-items-center" style="padding: 1rem">
-              <div>
-                <button id="bid-1" type="button" class="bid-button" onclick="raiseBid(1)">
-                  + 1 <span class="currency">M</span>
-                </button>
+
+
+              <div id="bid-buttons-wrapper"">
+
+                <div>
+                  <button id="bid-1" type="button" class="bid-button" onclick="raiseBid(1)">
+                    + 1 <span class="currency">M</span>
+                  </button>
+                </div>
+                <div>
+                  <button id="bid-5" type="button" class="bid-button" onclick="raiseBid(5)">
+                    + 5 <span class="currency">M</span>
+                  </button>
+                </div>
+                <div>
+                  <button id="bid-10" type="button" class="bid-button" onclick="raiseBid(10)">
+                    + 10 <span class="currency">M</span>
+                  </button>
+                </div>
+
               </div>
-              <div>
-                <button id="bid-5" type="button" class="bid-button" onclick="raiseBid(5)">
-                  + 5 <span class="currency">M</span>
-                </button>
-              </div>
-              <div>
-                <button id="bid-10" type="button" class="bid-button" onclick="raiseBid(10)">
-                  + 10 <span class="currency">M</span>
-                </button>
-              </div>
+
+
+
               <div>
                 <button id="bid-2" type="button" class="bid-button" onclick="doubleBid()">× 2</button>
               </div>
@@ -113,7 +125,7 @@
             </div>
           </div>
           {% comment %} Roster {% endcomment %}
-          <div id="roster" style="height: calc(100vh - 140px - 2rem)">
+          <div id="roster" class="no-mobile" style="height: calc(100vh - 140px - 2rem)">
             <div id="roster-title" class="d-flex justify-content-between {{user.club.label}}">
               <h3>{{user.club}}</h3>
               <h3 style="margin-left: 100px">

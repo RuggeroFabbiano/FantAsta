@@ -203,10 +203,6 @@ tr+tr {border-top: 1pt solid #F1C68E}
   box-shadow: 0 3px 5px 1px darkgrey;
 }
 
-.bid-button {
-  width: 50%;
-  margin: 0 auto 2rem;
-}
 
 .bid-button:hover {
   background-color: DarkMagenta;
@@ -216,4 +212,41 @@ tr+tr {border-top: 1pt solid #F1C68E}
 .bid-button[disabled]:hover {
   background-color: lightgrey;
   color: grey;
+}
+
+@media(max-width: 767px) {
+  .no-mobile {display: none}
+  button {min-width: auto}
+  #selection-wrapper {width: 95%}
+  #round-info-wrapper {
+    flex-direction: column;
+    width: 100%;
+  }
+  #bid-buttons-wrapper {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .bid-button {
+    padding: 0.75rem 1.5rem;
+    margin: 1rem 0;
+  }
+  #custom-bid {margin-top: 1rem}
+}
+
+@media(min-width: 768px) {
+  #selection-wrapper {width: 67%}
+  #round-info-wrapper {
+    flex-direction: row;
+    width: 75%;
+  }
+  .bid-button {
+    width: 50%;
+    margin: 0 auto 2rem;
+  }
+}
+
+#select-player {
+  border-color: white;
+  margin-left: 1rem;
 }

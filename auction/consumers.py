@@ -78,8 +78,17 @@ class Consumer(WebsocketConsumer):
             'participants': list(self.clubs),
             'club': self.club,
             'r': self.r,
-            'player': self.player and self.player.id
+            'role': self.roles[self.r],
+            'player': self.player and self.player.id,
+            'bidder': data['bidder'],
+            'label': data['label']
         }
+        if self.player is not None:
+            payload['name'] = self.player.name
+            payload['role'] = self.player.role
+            payload['team'] = self.player.team
+            payload['price'] = Player.object.get(id=self.player.id).price
+            payload['amount'] = self.player.price
         self.send(text_data=dumps(payload))
 
     def synchronise(self, data: dict) -> None:
@@ -108,7 +117,6 @@ class Consumer(WebsocketConsumer):
         """Select a new player and open bids"""
         club = Club.objects.get(name=self.club)
         self.player = Player.objects.get(id=data['player'])
-        self.player.price = 1
         self.player.club = club
         payload = {
             'event': 'start_bid',
@@ -120,14 +128,16 @@ class Consumer(WebsocketConsumer):
             'club': self.club,
             'label': club.label
         }
+        self.player.price = 1
         self.phase = "bids"
         self.send(text_data=dumps(payload))
 
     def update_bid(self, data: dict) -> None:
         """Update auction with last bid"""
-        self.player.price = data['amount']
-        self.player.club = Club.objects.get(name=data['club'])
-        self.send(text_data=dumps(data))
+        if data['amount'] > self.player.price:
+            self.player.price = data['amount']
+            self.player.club = Club.objects.get(name=data['club'])
+            self.send(text_data=dumps(data))
 
     def buy(self, data: dict) -> None:
         """Assign player of current bid and continue"""

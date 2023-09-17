@@ -82,11 +82,29 @@ socket.onmessage = function(event) {
                 phase = "awaiting participants";
                 setParticipants(payload.participants);
             // Detected late joiner while auction started: share global values for synchronisation
-            } else if (phase !== "awaiting participants") {send({"event": "late_join"});}
+            } else if (phase !== "awaiting participants") {
+                const bidder = $("#bidder").text();
+                const label = $("#current-bid").attr("class");
+                send({"event": "late_join", "bidder": bidder, "label": label});
+            }
             break;
         case "late_join":
             if (phase === "awaiting participants") {
+                phase = payload.phase;
                 showAuctionDashboard();
+                if (payload.phase === "awaiting choice") {
+                    setPlayerChoice(payload.club, payload.role);
+                    stopBids();
+                    $("#current-bid-cover").show();
+                } else {
+                    showPlayerInfo(payload);
+                    startBids(payload);
+                    // `updateBid` expects the bidder club being named `club`, but since this
+                    // payload contains data for both init. and bid "catch-up", it has been named
+                    // `bidder` to not override `club` holding current turn
+                    payload.club = payload.bidder;
+                    updateBid(payload);
+                }
                 payload.event = "synchronise";
                 send(payload);
             }
