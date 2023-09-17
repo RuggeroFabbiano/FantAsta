@@ -73,8 +73,6 @@ function assign() {send({"event": "assign"});}
 // Get messages and dispatch them to correct action
 socket.onmessage = function(event) {
     const payload = JSON.parse(event.data);
-    console.log("RECEIVE:");
-    console.log(payload);
     switch (payload.event) {
         case "join":
             // New participants: initialise
@@ -307,8 +305,6 @@ function stopAuction() {
  */
 function send(data) {
     if (!Object.keys(data).includes("event")) {throw new Error("Data is missing the event type");}
-    console.log("SEND:");
-    console.log(data);
     const serialisedData = JSON.stringify(data);
     socket.send(serialisedData);
 }
