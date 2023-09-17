@@ -23,7 +23,7 @@ class Consumer(WebsocketConsumer):
         club = self.scope['user'].club.name
         self.clubs.add(club)
         group_send = async_to_sync(self.channel_layer.group_send)
-        group_send(self.group, {'type': 'update.participants', 'new': club})
+        group_send(self.group, {'type': 'update.participants', 'enter': club})
 
     def receive(self, text_data=None, bytes_data=None):
         """
@@ -60,12 +60,10 @@ class Consumer(WebsocketConsumer):
 
     def update_participants(self, data: dict) -> None:
         """Set participant list"""
-        payload = {
-            'event': 'join',
-            'participants': list(self.clubs),
-            'new': data['new'],
-            'phase': self.phase
-        }
+        payload = data
+        payload['participants'] = list(self.clubs)
+        payload['phase'] = self.phase
+        payload['event'] = 'join' if 'enter' in payload else 'leave'
         self.send(text_data=dumps(payload))
 
     def synchronise(self, data: dict) -> None:
@@ -153,11 +151,12 @@ class Consumer(WebsocketConsumer):
 
     def disconnect(self, code):
         """Leave auction"""
-        self.clubs.remove(self.scope['user'].club.name)
+        club = self.scope['user'].club.name
+        self.clubs.remove(club)
         group_discard = async_to_sync(self.channel_layer.group_discard)
         group_discard(self.group, self.channel_name)
         group_send = async_to_sync(self.channel_layer.group_send)
-        group_send(self.group, {'type': 'update.participants'})
+        group_send(self.group, {'type': 'update.participants', 'leave': club})
 
     def _set_next_round(self) -> dict:
         """Set caller club and to-call role for next turn"""

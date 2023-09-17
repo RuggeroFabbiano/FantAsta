@@ -85,7 +85,7 @@ socket.onmessage = function(event) {
                 const amount = parseInt($("#best-bid").text());
                 send({
                     "event": "late_join",
-                    "club": payload.new,
+                    "club": payload.enter,
                     "phase": phase,
                     "participants": participantList,
                     "caller": caller,
@@ -146,6 +146,9 @@ socket.onmessage = function(event) {
         case "stop_auction":
             phase = "stopped";
             stopAuction();
+            break;
+        case "leave":
+            setParticipants(payload.participants);
             break;
         default:
             console.log(payload);

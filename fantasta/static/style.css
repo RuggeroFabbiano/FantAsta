@@ -233,6 +233,7 @@ tr+tr {border-top: 1pt solid #F1C68E}
   }
   #custom-bid {margin-top: 1rem}
   #bid-countdown-container {margin: 2rem auto}
+  #participants {width: 75%}
 }
 
 @media(min-width: 850px) {
