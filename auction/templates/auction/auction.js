@@ -78,8 +78,11 @@ socket.onmessage = function(event) {
     switch (payload.event) {
         case "join":
             phase = payload.phase;
-            if (phase === "awaiting participants") {setParticipants(payload.participants);}
-            else {showAuctionDashboard();}
+            setParticipants(payload.participants);
+            if (phase === undefined) {
+                phase = payload.phase;
+                showAuctionDashboard();
+            }
             break;
         case "start_auction":
             if (phase !== "stopped") {showAuctionDashboard();}
