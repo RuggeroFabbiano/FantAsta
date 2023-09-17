@@ -43,4 +43,4 @@ class ClearRosters(View):
         """Clear rosters"""
         Player.objects.update(club=None)
         Club.objects.update(next_call=None)
-        return redirect('admin/')
+        return redirect('/admin/')
