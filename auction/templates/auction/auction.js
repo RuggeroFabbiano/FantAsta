@@ -337,7 +337,7 @@ function getRole(roleIndex) {
  */
 function startCountDown(action) {
     if (action === "call") {
-        var timeLeft = 20;
+        var timeLeft = 30;
         $("#choice-countdown").text(timeLeft);
         callTimeout = setInterval(function() {
             $("#choice-countdown").text(timeLeft--);
