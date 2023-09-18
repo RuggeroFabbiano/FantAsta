@@ -45,9 +45,8 @@ class SendPassowrd(RedirectView):
             send_mail(
                 "Le tue credenziali per la SuperFantaAsta",
                 "Uhé testina!\n\n"
-                "Qui sotto trovi le tue credenziali ⬇️\n"
-                F"nome utente: {user}\n"
-                F"parola magica: {password}\n\n"
+                "Ecco la tua parolina magica per accedere alla"
+                F"FantaSuperAsta: {password}\n\n"
                 "Fa sö öna bèla squadra, dai!",
                 from_email=None,
                 recipient_list = [user.email],
