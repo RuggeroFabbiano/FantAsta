@@ -22,7 +22,7 @@
         -
         <span style="color: {% if club.n_c < 8 %}red{% else %}green{% endif %}">{{club.n_c}}</span>
         -
-        <span style="color: {% if club.n_a <  %}red{% else %}green{% endif %}">{{club.n_a}}</span>
+        <span style="color: {% if club.n_a < 6 %}red{% else %}green{% endif %}">{{club.n_a}}</span>
         ; Crediti rimasti:
         {% widthratio club.players.count 1 20 as average %}
         <span style="color: {% if club.money < 500-average %}red{% else %}green{% endif %}">{{club.money}}</span>
