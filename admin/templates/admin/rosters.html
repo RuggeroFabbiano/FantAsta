@@ -15,6 +15,18 @@
     {% for club in object_list %}
       <li>
         <a href="{% url 'admin-roster' pk=club.id %}">{{club.name}}</a>
+        (Rosa attuale:
+        <span style="color: {% if club.n_p < 3 %}red{% else %}green{% endif %}">{{club.n_p}}</span>
+        -
+        <span style="color: {% if club.n_d < 8 %}red{% else %}green{% endif %}">{{club.n_d}}</span>
+        -
+        <span style="color: {% if club.n_c < 8 %}red{% else %}green{% endif %}">{{club.n_c}}</span>
+        -
+        <span style="color: {% if club.n_a <  %}red{% else %}green{% endif %}">{{club.n_a}}</span>
+        ; Crediti rimasti:
+        {% widthratio club.players.count 1 20 as t %}
+        <span style="color: {% if club.money < 500 - t %}red{% else %}green{% endif %}">{{club.money}}</span>
+        )
       </li>
     {% endfor %}
   </ul>
